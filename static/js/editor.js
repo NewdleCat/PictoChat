@@ -53,7 +53,7 @@ document.addEventListener("mouseup", (event) => {
     mousedown = false
 })
 
-document.addEventListener("mousedown", (event) => {
+canvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale

@@ -38,3 +38,17 @@ url_signer = URLSigner(session)
 def index():
     print("User:", get_user_email())
     return dict()
+
+@action('editor')
+@action.uses(db, session, auth, "editor.html")
+def edit_phones():
+    return dict()
+
+@action('post/<image_data:string>',method=["POST"])
+@action.uses(db, session, auth)
+def edit_phones(image_data = None):
+	assert image_data is not None
+
+	redirect(URL('index'))
+    return dict()
+

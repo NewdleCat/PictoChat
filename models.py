@@ -26,7 +26,7 @@ db.define_table(
     Field('image_data', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
 )
-db.contact.user_email.readable = db.contact.user_email.writable = False 
+db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 
 # db.define_table(
 # 	'phone',
