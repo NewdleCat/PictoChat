@@ -22,6 +22,11 @@ const getPixel = (x, y) => {
     return data[Math.floor(x)][Math.floor(y)]
 }
 
+const test = () => {
+    let link = window.location.href
+    window.location.href = link.substring(0, link.length - 6) + "post"
+}
+
 const refreshCanvas = () => {
     // fill the entire canvas with white
     ctx.fillStyle = "white"
