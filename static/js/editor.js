@@ -20,11 +20,6 @@ const getPixel = (x, y) => {
     return data[Math.floor(x)][Math.floor(y)]
 }
 
-const test = () => {
-    let link = window.location.href
-    window.location.href = link.substring(0, link.length - 6) + "post"
-}
-
 const refreshCanvas = () => {
     // fill the entire canvas with white
     ctx.fillStyle = "white"
@@ -44,8 +39,8 @@ const refreshCanvas = () => {
 // converts the canvas data to a hexidecimal string
 const dataToString = () => {
     let str = ""
-    for (let x=0; x<width; x+=4) {
-        for (let y=0; y<height; y++) {
+    for (let y=0; y<height; y++) {
+        for (let x=0; x<width; x+=4) {
             let n = data[x][y] || 0
             n += (data[x+1][y] || 0)*2
             n += (data[x+2][y] || 0)*4
