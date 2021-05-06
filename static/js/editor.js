@@ -2,8 +2,6 @@ const width = 128
 const height = 64
 const scale = 8
 
-// 1 is black, 0 is white
-
 // because the canvas needs to be big, we keep the internal
 // pixel data seperate from the canvas's actual pixel data
 const data = []
@@ -43,6 +41,21 @@ const refreshCanvas = () => {
     }
 }
 
+// converts the canvas data to a hexidecimal string
+const dataToString = () => {
+    let str = ""
+    for (let x=0; x<width; x+=4) {
+        for (let y=0; y<height; y++) {
+            let n = data[x][y] || 0
+            n += (data[x+1][y] || 0)*2
+            n += (data[x+2][y] || 0)*4
+            n += (data[x+3][y] || 0)*8
+            str += n.toString(16)
+        }
+    }
+    return str
+}
+
 const canvas = document.createElement("canvas")
 canvas.id = "editor"
 canvas.width = width*scale
@@ -62,7 +75,7 @@ canvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
-    setPixel(mx,my,true)
+    setPixel(mx,my,1)
     refreshCanvas()
 })
 
@@ -82,7 +95,7 @@ canvas.addEventListener("mousemove", (event) => {
         for (let i=0; i<=dist; i++) {
             let x = lastmx + Math.cos(angle)*i
             let y = lastmy + Math.sin(angle)*i
-            setPixel(x,y,true)
+            setPixel(x,y,1)
         }
 
         refreshCanvas()
