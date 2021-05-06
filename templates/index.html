@@ -1,5 +1,13 @@
 [[extend 'layout.html']]
 
+<script>
+const images = []
+const titles = []
+[[for d in range(0,len(data)):]]
+images[ [[=d]] ] = "[[ = data[d]["image_data"] ]]"
+images[ [[=d]] ] = "[[ = data[d]["title"] ]]"
+[[pass]]
+</script> 
 
 <div class="section">
 	<a class="button is-warning" href="[[=URL('editor')]]">

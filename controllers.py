@@ -37,7 +37,7 @@ url_signer = URLSigner(session)
 @action.uses(db, auth, 'index.html')
 def index():
     print("User:", get_user_email())
-    data = db(db.drawing.user_email == get_user_email()).select()
+    data = db(db.drawing.user_email == get_user_email()).select().as_list()
     return dict(data = data)
 
 @action('editor')
