@@ -21,7 +21,8 @@ const getPixel = (x, y) => {
 }
 
 const drawCircle = (x, y, radius, value) => {
-    for (let r=0; r<radius; r++) {
+    setPixel(x,y,value)
+    for (let r=0; r<radius; r+=0.5) {
         for (let a=0; a<Math.PI*2; a+=Math.PI/8) {
             setPixel(x + Math.cos(a)*r, y + Math.sin(a)*r, value)
         }
@@ -95,11 +96,7 @@ canvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
-    if (brushSize > 1) {
-        drawCircle(x,y,brushSize,brushColor)
-    } else {
-        setPixel(x,y,brushColor)
-    }
+    drawCircle(x,y,brushSize,brushColor)
     refreshCanvas()
 })
 
@@ -118,11 +115,7 @@ canvas.addEventListener("mousemove", (event) => {
             let x = lastmx + Math.cos(angle)*i
             let y = lastmy + Math.sin(angle)*i
 
-            if (brushSize > 1) {
-                drawCircle(x,y,brushSize,brushColor)
-            } else {
-                setPixel(x,y,brushColor)
-            }
+            drawCircle(x,y,brushSize,brushColor)
         }
 
         refreshCanvas()
