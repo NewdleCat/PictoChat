@@ -1,2 +1,2 @@
-# PictoChat
+# Pictochat
 its picto chat
