@@ -53,7 +53,9 @@ const dataToString = () => {
             str += n.toString(16)
         }
     }
-    return str
+    // return str
+    let link = window.location.href
+    window.location.href = link.substring(0, link.length - 6) + "post/" + str
 }
 
 const canvas = document.createElement("canvas")

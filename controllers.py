@@ -37,17 +37,20 @@ url_signer = URLSigner(session)
 @action.uses(db, auth, 'index.html')
 def index():
     print("User:", get_user_email())
-    return dict()
+    data = db(db.drawing.user_email == get_user_email()).select()
+    return dict(data = data)
 
 @action('editor')
 @action.uses(db, session, auth, "editor.html")
 def editor():
     return dict()
 
-@action('post/<image_data>',method=["POST"])
+@action('post/<image_data>',method=["POST", "GET"])
 @action.uses(db, session, auth)
 def post(image_data = None):
     assert image_data is not None
+    print(image_data)
+    db.drawing.insert(title = "temporary title", image_data = image_data)
     redirect(URL('index'))
     return dict()
 
