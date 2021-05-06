@@ -6,6 +6,7 @@ for (const image of images) {
 	const canvas = document.createElement("canvas")
 	canvas.width = width*scale
 	canvas.height = height*scale
+	canvas.style.margin = "16px"
 	canvas.style.border = "dashed"
 	document.getElementsByTagName("body")[0].appendChild(canvas)
 	const ctx = canvas.getContext("2d")
