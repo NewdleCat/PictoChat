@@ -30,14 +30,23 @@ from yatl.helpers import A
 from .common import db, session, T, cache, auth, logger, authenticated, unauthenticated, flash
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
+import uuid
 
 url_signer = URLSigner(session)
 
 @action('index')
 @action.uses(db, auth, 'index.html')
 def index():
-    print("User:", get_user_email())
-    data = db(db.drawing.user_email == get_user_email()).select().as_list()
+    user = get_user_email()
+    print("User:", user)
+
+    temp = db(db.friend_code.user_email == user).select()
+    if len(temp) == 0:
+        db.friend_code.insert(uuid=uuid.uuid4())
+        pass
+    print(len(temp))
+
+    data = db(db.drawing.user_email == user).select().as_list()
     return dict(data = data)
 
 @action('editor')

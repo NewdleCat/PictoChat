@@ -28,12 +28,10 @@ db.define_table(
 )
 db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 
-# db.define_table(
-# 	'phone',
-# 	Field('contact_id', 'reference contact'),
-# 	Field('phone_number', requires=IS_NOT_EMPTY()),
-# 	Field('phone_type', requires=IS_NOT_EMPTY()),
-# )
-# db.phone.contact_id.readable = db.phone.contact_id.writable = False 
+db.define_table(
+	'friend_code',
+	Field('uuid', requires=IS_NOT_EMPTY()),
+    Field('user_email', default=get_user_email),
+)
 
 db.commit()
