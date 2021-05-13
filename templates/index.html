@@ -2,19 +2,19 @@
 
 <script>
 	const images = []
-		[[for d in range(0,len(data)):]]
-		images[ [[=d]] ] = {
-				data: "[[ = data[d]["image_data"] ]]",
-				title: "[[ = data[d]["title"] ]]",
-				artist: "[[ = data[d]["user_email"] ]]",
-				date: "[[ = data[d]["date_added"] ]]",
-			}
-		[[pass]]
+	[[for d in range(0,len(data)):]]
+	images[ [[=d]] ] = {
+			data: "[[ = data[d]["image_data"] ]]",
+			title: "[[ = data[d]["title"] ]]",
+			artist: "[[ = data[d]["user_email"] ]]",
+			date: "[[ = data[d]["date_added"] ]]",
+		}
+	[[pass]]
 </script>
 
 <style type="text/css">
 	#drawings {
-		width: min(100vw, 500px);
+		width: min(100vw, 750px);
 		padding-left: 0;
 	    padding-right: 0;
 	    margin-left: auto;
@@ -24,6 +24,15 @@
 
 	#editorCanvas {
 		position: fixed;
+	}
+
+	.feedCanvas {
+	    display: block;
+		border-color: black;
+		border: dashed;
+		margin-left: auto;
+		margin-right: auto;
+		padding: none;
 	}
 
 	#dim {
@@ -41,6 +50,10 @@
 		position: fixed;
 		left: 120px;
 		top: 120px;
+	}
+
+	:root {
+		background-color: #ddd;
 	}
 </style>
 
@@ -75,6 +88,43 @@
 	<div id="dim"></div>
 </template>
 
+<template id="_feedEntry">
+	some shit
+	<div class="box">
+		<article class="media">
+			<div class="media-content">
+				<div class="content">
+					<p>
+					<div class="feedEntryTitle"><strong>Cock Suckler</strong></div>
+					<div class="feedEntryUser"><small> by @johnsmith</small></div>
+					<br>
+						<canvas class=feedCanvas></canvas>
+					</p>
+				</div>
+				<nav class="level is-mobile">
+					<div class="level-left">
+						<a class="level-item" aria-label="reply">
+							<span class="icon is-small">
+								<i class="fa fa-reply" aria-hidden="true"></i>
+							</span>
+						</a>
+						<a class="level-item" aria-label="retweet">
+							<span class="icon is-small">
+								<i class="fa fa-retweet" aria-hidden="true"></i>
+							</span>
+						</a>
+						<a class="level-item" aria-label="like">
+							<span class="icon is-small">
+								<i class="fa fa-heart" aria-hidden="true"></i>
+							</span>
+						</a>
+					</div>
+				</nav>
+			</div>
+		</article>
+	</div>
+</template>
+
 <div class="section">
 	<div id="editorDiv">
 		<canvas id="editorCanvas"></canvas>
@@ -94,6 +144,10 @@
 	const addFriend = () => {
 		let link = window.location.href
     	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + document.getElementById("codeInput").value
+	}
+
+	const fromTemplate = (template) => {
+		return document.getElementById(template).content.firstElementChild.cloneNode(true)
 	}
 </script>
 <script src="js/viewer.js"></script>

@@ -74,11 +74,6 @@ const ctx = editorCanvas.getContext("2d")
 let mousedown = false
 let lastmx, lastmy
 
-const fromTemplate = (template) => {
-    console.log(template)
-    return document.getElementById(template).content.cloneNode(true)
-}
-
 const toggleEditor = () => {
     showEditor = !showEditor
 

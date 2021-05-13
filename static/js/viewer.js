@@ -10,15 +10,22 @@ const drawFeed = () => {
 		removeAllChildNodes()
 	}
     for (const image of images) {
-		const canvas = document.createElement("canvas")
-		canvas.width = document.getElementById("drawings").clientWidth
-		canvas.height = canvas.width/2
-		let scale = canvas.width/128
-		canvas.style.border = "dashed"
-		document.getElementById("drawings").appendChild(canvas)
-		const ctx = canvas.getContext("2d")
+		const feedEntry = fromTemplate("_feedEntry")
+		document.getElementById("drawings").appendChild(feedEntry)
 
+		const canvas = feedEntry.getElementsByTagName("canvas")[0]
+		canvas.width  = feedEntry.clientWidth - 48
+		canvas.height = canvas.width/2 
+		let scale = canvas.width/128
+		const ctx = canvas.getContext("2d")
 		ctx.fillStyle = "black"
+
+		const title = feedEntry.getElementsByClassName("feedEntryTitle")[0]
+		title.innerHTML = `<strong> ${image.title} </strong>`
+
+		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
+		user.innerHTML = `<small> created by ${image.artist} at ${image.date} </small>`
+
 		let x = 0
 		let y = 0
 		for (let i=0; i<image.data.length; i++) {
