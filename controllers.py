@@ -31,7 +31,7 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 import uuid
-
+from operator import itemgetter 
 url_signer = URLSigner(session)
 
 @action('index')
@@ -43,15 +43,46 @@ def index():
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
         db.friend_code.insert(uuid=uuid.uuid4())
-        pass
-    print(len(temp))
 
     data = db(db.drawing.user_email == user).select().as_list()
+    following = db(db.friend_code.user_email == user).select()[0]['following']
+    print(following)
+
+    if following != None:
+        for f in following:
+            temp = db(db.drawing.user_email == f).select().as_list()
+            data = data + temp
+
+    data = sorted(data, key=itemgetter('date_added'))
+
     return dict(data = data)
 
 @action('editor')
 @action.uses(db, session, auth, "editor.html")
 def editor():
+    return dict()
+
+@action('add_friend/<uuid>')
+@action.uses(db, session, auth)
+def add_friend(uuid = None):
+    assert uuid is not None
+    user = get_user_email()
+    print("YAA")
+    friend = db(db.friend_code.uuid == uuid).select()
+    you = db(db.friend_code.user_email == user).select()
+    if len(friend) == 0:
+        redirect(URL('index'))
+
+    followingList = you[0]['following']
+    friendName = friend[0]['user_email'] 
+    if followingList == None:
+        followingList = []
+    if friendName not in followingList:
+        followingList.append(friendName)
+    if friendName != user:
+        db.friend_code.update_or_insert(db.friend_code.user_email == user, following = followingList)
+
+    redirect(URL('index'))
     return dict()
 
 @action('post/<image_data>',method=["POST", "GET"])

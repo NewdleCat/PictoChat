@@ -49,6 +49,9 @@
 		<canvas id="dimCanvas"></canvas>
 	</div>
 
+	<input id="codeInput" type="text">
+	<input type="button" value="Add Friend" onclick="test()">
+
 	<a class="button is-warning" onclick="toggleEditor()">
 		<span class="icon">
 			<i class="fa fa-fw fa-pencil"></i>
@@ -63,6 +66,12 @@
 	const width = 128
 	const height = 64
 	let showEditor = true
+
+	const test = () => {
+		console.log("fuck")
+		let link = window.location.href
+    	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + document.getElementById("codeInput").value
+	}
 </script>
 <script src="js/viewer.js"></script>
 <script src="js/editor.js"></script>
