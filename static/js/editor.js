@@ -56,7 +56,7 @@ const dataToString = () => {
     }
     // return str
     let link = window.location.href
-    window.location.href = link.substring(0, link.length - 6) + "post/" + str
+    window.location.href = link.substring(0, link.length - 5) + "post/" + str
 }
 
 const editorCanvas = document.getElementById("editorCanvas")
@@ -77,6 +77,11 @@ const toggleEditor = () => {
         calculateCanvasScale()
         document.getElementById("editorDiv").appendChild(dimCanvas)
         document.getElementById("editorDiv").appendChild(editorCanvas)
+        let postButton = document.createElement("button")
+        postButton.innerHTML = "Post!"
+        postButton.onclick = dataToString
+        postButton.id = "editorPostButton"
+        document.body.appendChild(postButton)
     } else {
         document.getElementById("editorDiv").removeChild(dimCanvas)
         document.getElementById("editorDiv").removeChild(editorCanvas)
