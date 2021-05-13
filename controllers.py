@@ -66,6 +66,9 @@ def editor():
 @action.uses(db, session, auth)
 def add_friend(uuid = None):
     assert uuid is not None
+    if uuid == "":
+        redirect(URL('index'))
+        
     user = get_user_email()
     print("YAA")
     friend = db(db.friend_code.uuid == uuid).select()
