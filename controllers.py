@@ -53,9 +53,18 @@ def index():
             temp = db(db.drawing.user_email == f).select().as_list()
             data = data + temp
 
-    data = sorted(data, key=itemgetter('date_added'))
+    data = sorted(data, key=itemgetter('date_added'), reverse = True)
 
-    return dict(data = data)
+    owner = []
+    for d in data:
+        if d['user_email'] == user:
+            owner.append(True)
+        else:
+            owner.append(False)
+
+    print(owner)
+
+    return dict(data = data, owner = owner)
 
 @action('editor')
 @action.uses(db, session, auth, "editor.html")
@@ -68,7 +77,7 @@ def add_friend(uuid = None):
     assert uuid is not None
     if uuid == "":
         redirect(URL('index'))
-        
+
     user = get_user_email()
     print("YAA")
     friend = db(db.friend_code.uuid == uuid).select()
@@ -97,3 +106,9 @@ def post(image_data = None):
     redirect(URL('index'))
     return dict()
 
+@action('delete_image/<image_id>', method=["POST", "GET"])
+@action.uses(db, session, auth.user)
+def delete_image(image_id = None):
+    assert image_id is not None
+    db(db.drawing.id == image_id).delete()
+    redirect(URL('index'))

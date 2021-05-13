@@ -4,10 +4,12 @@
 	const images = []
 	[[for d in range(0,len(data)):]]
 	images[ [[=d]] ] = {
+			id: "[[ = data[d]["id"] ]]",
 			data: "[[ = data[d]["image_data"] ]]",
 			title: "[[ = data[d]["title"] ]]",
 			artist: "[[ = data[d]["user_email"] ]]",
 			date: "[[ = data[d]["date_added"] ]]",
+			owner: "[[ = owner[d] ]]",
 		}
 	[[pass]]
 </script>
@@ -105,10 +107,10 @@
 			<div class="media-content">
 				<div class="content">
 					<p>
-					<div class="feedEntryTitle"><strong>Cock Suckler</strong></div>
-					<div class="feedEntryUser"><small> by @johnsmith</small></div>
+					<div class="feedEntryTitle"></div>
+					<div class="feedEntryUser"></div>
 					<br>
-						<canvas class=feedCanvas></canvas>
+						<canvas class=feedCanvas ></canvas>
 					</p>
 				</div>
 				<nav class="level is-mobile">
@@ -128,6 +130,7 @@
 								<i class="fa fa-heart" aria-hidden="true"></i>
 							</span>
 						</a>
+						<div class="feedTrash"></div>
 					</div>
 				</nav>
 			</div>
@@ -166,6 +169,11 @@
 			return
 		}
     	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + code
+	}
+
+	const deleteImage = (id) => {
+		let link = window.location.href
+    	window.location.href = link.substring(0, link.length - 5) + "delete_image/" + id
 	}
 </script>
 <script src="js/viewer.js"></script>

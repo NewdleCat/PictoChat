@@ -26,6 +26,12 @@ const drawFeed = () => {
 		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
 		user.innerHTML = `<small> created by ${image.artist} at ${image.date} </small>`
 
+		if (image.owner == "True")
+		{
+			const trash = feedEntry.getElementsByClassName("feedTrash")[0]
+			trash.innerHTML = `<a class="level-item" aria-label="like"><span class="icon is-small"><i class="fa fa-trash" aria-hidden="true" onclick="deleteImage(${image.id})"></i></span> </a>`
+		}
+
 		let x = 0
 		let y = 0
 		for (let i=0; i<image.data.length; i++) {
