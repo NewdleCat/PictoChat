@@ -81,7 +81,7 @@
 	</div>
 
 	<input id="codeInput" type="text">
-	<input type="button" value="Add Friend" onclick="test()">
+	<input type="button" value="Add Friend" onclick="addFriend()">
 
 	<div id="drawings"></div>
 </div>
@@ -91,8 +91,7 @@
 	const height = 64
 	let showEditor = true
 
-	const test = () => {
-		console.log("fuck")
+	const addFriend = () => {
 		let link = window.location.href
     	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + document.getElementById("codeInput").value
 	}
