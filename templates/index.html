@@ -42,6 +42,10 @@
 		left: 120px;
 		top: 120px;
 	}
+
+	#inputs {
+		z-index: 10;
+	}
 </style>
 
 <template id="_editorCloseButton">
@@ -80,8 +84,10 @@
 		<canvas id="editorCanvas"></canvas>
 	</div>
 
-	<input id="codeInput" type="text">
-	<input type="button" value="Add Friend" onclick="addFriend()">
+	<div id="inputs">
+		<input class="input" id="codeInput" type="text">
+		<input class="input" type="button" value="Add Friend" onclick="addFriend()">
+	</div>
 
 	<div id="drawings"></div>
 </div>
@@ -93,7 +99,11 @@
 
 	const addFriend = () => {
 		let link = window.location.href
-    	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + document.getElementById("codeInput").value
+		let code = document.getElementById("codeInput").value
+		if (code == "") {
+			return
+		}
+    	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + code
 	}
 </script>
 <script src="js/viewer.js"></script>
