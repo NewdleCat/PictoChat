@@ -90,6 +90,8 @@ const toggleEditor = () => {
         document.body.appendChild(fromTemplate("_editorCloseButton"))
 
         remove(document.getElementById("editButton"))
+        remove(document.getElementById("friendInput"))
+
         calculateCanvasScale()
     } else {
         document.getElementById("editorDiv").removeChild(editorCanvas)
@@ -101,6 +103,14 @@ const toggleEditor = () => {
         }
 
         document.body.appendChild(fromTemplate("_editButton"))
+        document.body.appendChild(fromTemplate("_friendInput"))
+
+		const addFriendInput = document.getElementById("friendInput")
+		if (addFriendInput) {
+            addFriendInput.style.left = innerWidth - addFriendInput.clientWidth - 64 + "px"
+            addFriendInput.style.top = "-64 px"
+        }
+
         let edit = document.getElementById("editButton")
         edit.style.top = "64px"
         edit.style.left = "64px"

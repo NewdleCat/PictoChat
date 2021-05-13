@@ -52,6 +52,13 @@
 		top: 120px;
 	}
 
+	#editButton {
+		position: fixed;
+		height: 100px;
+		padding-left: 64px;
+		padding-right: 64px;
+	}
+
 	:root {
 		background-color: #ddd;
 	}
@@ -78,7 +85,7 @@
 </template>
 
 <template id="_editButton">
-	<a class="button is-primary" onclick="toggleEditor()" id="editButton" style="position: fixed">
+	<a class="button is-primary" onclick="toggleEditor()" id="editButton">
 		<span>
 			<span class="icon">
 				<i class="fa fa-fw fa-pencil"></i>
@@ -93,7 +100,6 @@
 </template>
 
 <template id="_feedEntry">
-	some shit
 	<div class="box">
 		<article class="media">
 			<div class="media-content">
@@ -129,14 +135,16 @@
 	</div>
 </template>
 
+<template id="_friendInput">
+	<div id="friendInput" style="position: absolute; width: 300px; top: 64; left: 64;">
+		<input class="input" id="codeInput" type="text">
+		<input class="input" type="button" value="Add Friend" onclick="addFriend()">
+	</div>
+</template>
+
 <div class="section">
 	<div id="editorDiv">
 		<canvas id="editorCanvas"></canvas>
-	</div>
-
-	<div id="inputs">
-		<input class="input" id="codeInput" type="text">
-		<input class="input" type="button" value="Add Friend" onclick="addFriend()">
 	</div>
 
 	<div id="drawings"></div>
@@ -147,6 +155,10 @@
 	const height = 64
 	let showEditor = true
 
+	const fromTemplate = (template) => {
+		return document.getElementById(template).content.firstElementChild.cloneNode(true)
+	}
+
 	const addFriend = () => {
 		let link = window.location.href
 		let code = document.getElementById("codeInput").value
@@ -154,10 +166,6 @@
 			return
 		}
     	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + code
-	}
-
-	const fromTemplate = (template) => {
-		return document.getElementById(template).content.firstElementChild.cloneNode(true)
 	}
 </script>
 <script src="js/viewer.js"></script>
