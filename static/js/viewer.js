@@ -5,7 +5,7 @@ function removeAllChildNodes() {
 	}
 }
 
-const calculateCanvasScale = () => {
+const drawFeed = () => {
 	if (document.getElementById("drawings").childElementCount > 0) {
 		removeAllChildNodes()
 	}
@@ -50,5 +50,5 @@ const calculateCanvasScale = () => {
 		}
 	}
 }
-calculateCanvasScale()
-window.addEventListener("resize", calculateCanvasScale)
+drawFeed()
+window.addEventListener("resize", drawFeed)
