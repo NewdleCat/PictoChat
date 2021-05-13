@@ -64,7 +64,6 @@ const dataToString = () => {
 }
 
 const editorCanvas = document.getElementById("editorCanvas")
-const dimCanvas = document.getElementById("dimCanvas")
 let scale
 let brushSize = 1
 let brushColor = 1
@@ -90,7 +89,7 @@ const toggleEditor = () => {
     }
 
     if (showEditor) {
-        document.getElementById("editorDiv").appendChild(dimCanvas)
+        document.getElementById("editorDiv").appendChild(fromTemplate("_dim"))
         document.getElementById("editorDiv").appendChild(editorCanvas)
         document.body.appendChild(fromTemplate("_editorPostButton"))
         document.body.appendChild(fromTemplate("_editorCloseButton"))
@@ -98,10 +97,13 @@ const toggleEditor = () => {
         remove(document.getElementById("editButton"))
         calculateCanvasScale()
     } else {
-        document.getElementById("editorDiv").removeChild(dimCanvas)
         document.getElementById("editorDiv").removeChild(editorCanvas)
         remove(document.getElementById("editorPostButton"))
         remove(document.getElementById("editorCloseButton"))
+        let dim = document.getElementById("dim")
+        if (dim) {
+            document.getElementById("editorDiv").removeChild(dim)
+        }
 
         document.body.appendChild(fromTemplate("_editButton"))
         let edit = document.getElementById("editButton")
@@ -118,15 +120,6 @@ const calculateCanvasScale = () => {
     editorCanvas.width = width*scale
     editorCanvas.height = height*scale
     refreshCanvas()
-
-    dimCanvas.width = innerWidth
-    dimCanvas.height = innerHeight
-    dimCanvas.style.top = "0px"
-    dimCanvas.style.left = "0px"
-    let dctx = dimCanvas.getContext("2d")
-    dctx.fillStyle = "black"
-    dctx.globalAlpha = 0.75
-    dctx.fillRect(0,0, dimCanvas.width, dimCanvas.height)
 
     // put the close button in the right spot
     let close = document.getElementById("editorCloseButton")
