@@ -1,9 +1,13 @@
 // because the canvas needs to be big, we keep the internal
 // pixel data seperate from the canvas's actual pixel data
-const data = []
-for (let i=0; i<width; i++) {
-    data[i] = []
+let data = []
+const clearData = () => {
+    data = []
+    for (let i=0; i<width; i++) {
+        data[i] = []
+    }
 }
+clearData()
 
 const setPixel = (x, y, value) => {
     x = Math.floor(x)
@@ -71,20 +75,38 @@ const ctx = editorCanvas.getContext("2d")
 let mousedown = false
 let lastmx, lastmy
 
+const fromTemplate = (template) => {
+    console.log(template)
+    return document.getElementById(template).content.cloneNode(true)
+}
+
 const toggleEditor = () => {
     showEditor = !showEditor
+
+    const remove = e => {
+        if (e) {
+            document.body.removeChild(e)
+        }
+    }
+
     if (showEditor) {
-        calculateCanvasScale()
         document.getElementById("editorDiv").appendChild(dimCanvas)
         document.getElementById("editorDiv").appendChild(editorCanvas)
-        let postButton = document.createElement("button")
-        postButton.innerHTML = "Post!"
-        postButton.onclick = dataToString
-        postButton.id = "editorPostButton"
-        document.body.appendChild(postButton)
+        document.body.appendChild(fromTemplate("_editorPostButton"))
+        document.body.appendChild(fromTemplate("_editorCloseButton"))
+
+        remove(document.getElementById("editButton"))
+        calculateCanvasScale()
     } else {
         document.getElementById("editorDiv").removeChild(dimCanvas)
         document.getElementById("editorDiv").removeChild(editorCanvas)
+        remove(document.getElementById("editorPostButton"))
+        remove(document.getElementById("editorCloseButton"))
+
+        document.body.appendChild(fromTemplate("_editButton"))
+        let edit = document.getElementById("editButton")
+        edit.style.top = "64px"
+        edit.style.left = "64px"
     }
 }
 
@@ -105,6 +127,20 @@ const calculateCanvasScale = () => {
     dctx.fillStyle = "black"
     dctx.globalAlpha = 0.75
     dctx.fillRect(0,0, dimCanvas.width, dimCanvas.height)
+
+    // put the close button in the right spot
+    let close = document.getElementById("editorCloseButton")
+    if (close) {
+        close.style.left = innerWidth/2 + width*scale/2 - close.clientWidth/2 + "px"
+        close.style.top = innerHeight/2 - height*scale/2 - close.clientHeight/2 + "px"
+    }
+
+    // put the post button in the right spot
+    let post = document.getElementById("editorPostButton")
+    if (post) {
+        post.style.left = innerWidth/2 - post.clientWidth/2 + "px"
+        post.style.top = innerHeight/2 + editorCanvas.height/2 + 16 + "px"
+    }
 }
 calculateCanvasScale()
 window.addEventListener("resize", calculateCanvasScale)

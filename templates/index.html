@@ -35,26 +35,43 @@
 
 	#editorPostButton {
 		position: absolute;
-		padding: 0;
-		margin: 0;
-		display: block;
 		left: 120px;
 		top: 120px;
 	}
 </style>
+
+<template id="_editorCloseButton">
+	<a class="button is-danger" onclick="toggleEditor(); clearData()" id="editorCloseButton" style="position: absolute">
+		<span class="icon">
+			<i class="fa fa-fw fa-times"></i>
+		</span>
+	</a>
+</template>
+
+<template id="_editorPostButton">
+	<a class="button is-primary" onclick="dataToString()" id="editorPostButton" style="position: absolute">
+		<span>
+			Post!
+		</span>
+	</a>
+</template>
+
+<template id="_editButton">
+	<a class="button is-primary" onclick="toggleEditor()" id="editButton" style="position: absolute">
+		<span>
+			<span class="icon">
+				<i class="fa fa-fw fa-pencil"></i>
+			</span>
+			New Picto
+		</span>
+	</a>
+</template>
 
 <div class="section">
 	<div id="editorDiv">
 		<canvas id="editorCanvas"></canvas>
 		<canvas id="dimCanvas"></canvas>
 	</div>
-
-	<a class="button is-warning" onclick="toggleEditor()">
-		<span class="icon">
-			<i class="fa fa-fw fa-pencil"></i>
-		</span>
-		<span>Edit</span>
-	</a>
 
 	<div id="drawings"></div>
 </div>
