@@ -24,6 +24,7 @@ db.define_table(
     'drawing',
     Field('title', requires=IS_NOT_EMPTY()),
     Field('image_data', requires=IS_NOT_EMPTY()),
+    # Field('date_added', type="datetime"),
     Field('user_email', default=get_user_email),
 )
 db.drawing.user_email.readable = db.drawing.user_email.writable = False 
@@ -32,6 +33,7 @@ db.define_table(
 	'friend_code',
 	Field('uuid', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
+    Field('following', 'list:string'),
 )
 
 db.commit()
