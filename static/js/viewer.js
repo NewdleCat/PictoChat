@@ -1,7 +1,3 @@
-const width = 128
-const height = 64
-
-
 function removeAllChildNodes() {
 	const parent = document.getElementById('drawings')
     while (parent.firstChild) {

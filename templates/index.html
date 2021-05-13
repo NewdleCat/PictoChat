@@ -2,13 +2,13 @@
 
 <script>
 	const images = []
-	[[for d in range(0,len(data)):]]
+		[[for d in range(0,len(data)):]]
 		images[ [[=d]] ] = {
-			data: "[[ = data[d]["image_data"] ]]",
-			title: "[[ = data[d]["title"] ]]",
-		}
-	[[pass]]
-</script> 
+				data: "[[ = data[d]["image_data"] ]]",
+				title: "[[ = data[d]["title"] ]]",
+			}
+		[[pass]]
+</script>
 
 <style type="text/css">
 	#drawings {
@@ -19,19 +19,49 @@
 	    margin-right: auto;
 	    display: block;
 	}
+
+	#editorCanvas {
+		position: absolute;
+	}
+
+	#dimCanvas {
+		position: absolute;
+		padding: 0;
+		margin: 0;
+		display: block;
+		left: 0px;
+		top: 0px;
+	}
 </style>
 
 <div class="section">
+	<div id="editorDiv">
+		<canvas id="editorCanvas"></canvas>
+		<canvas id="dimCanvas"></canvas>
+	</div>
 
 	<div id="drawings"></div>
-
+	<!--
 	<a class="button is-warning" href="[[=URL('editor')]]">
-	   <span class="icon">
-	   		<i class="fa fa-fw fa-pencil"></i> 
-	   </span>
-	   <span>Edit</span>
-   	</a>
+		<span class="icon">
+			<i class="fa fa-fw fa-pencil"></i>
+		</span>
+		<span>Edit</span>
+	</a>
+	-->
+	<a class="button is-warning" onclick="toggleEditor()">
+		<span class="icon">
+			<i class="fa fa-fw fa-pencil"></i>
+		</span>
+		<span>Edit</span>
+	</a>
 </div>
 
+<script>
+const width = 128
+const height = 64
+let showEditor = true
+</script>
 <script src="js/viewer.js"></script>
-<script src="js/index.js"></script>
+<script src="js/editor.js"></script>
+<script> toggleEditor() </script>
