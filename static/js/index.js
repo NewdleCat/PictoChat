@@ -1,6 +1,6 @@
-var overlay = new Vue({
+const index = new Vue({
   el: '#overlay',
   data: {
-    visible: true
+    showEditor: true
   }
 })

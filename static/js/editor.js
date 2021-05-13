@@ -1,6 +1,3 @@
-const width = 128
-const height = 64
-
 // because the canvas needs to be big, we keep the internal
 // pixel data seperate from the canvas's actual pixel data
 const data = []
@@ -32,7 +29,7 @@ const drawCircle = (x, y, radius, value) => {
 const refreshCanvas = () => {
     // fill the entire canvas with white
     ctx.fillStyle = "white"
-    ctx.fillRect(0,0, canvas.width, canvas.height)
+    ctx.fillRect(0,0, editorCanvas.width, editorCanvas.height)
 
     // go through and fill in the black pixels
     ctx.fillStyle = "black"
@@ -62,28 +59,47 @@ const dataToString = () => {
     window.location.href = link.substring(0, link.length - 6) + "post/" + str
 }
 
-const canvas = document.createElement("canvas")
+const editorCanvas = document.getElementById("editorCanvas")
+const dimCanvas = document.getElementById("dimCanvas")
 let scale
 let brushSize = 1
 let brushColor = 1
-canvas.id = "editor"
-canvas.width = width*scale
-canvas.height = height*scale
-canvas.style.border = "dashed"
-canvas.style.position = "relative"
-document.getElementsByTagName("body")[0].appendChild(canvas)
-const ctx = canvas.getContext("2d")
+editorCanvas.width = width*scale
+editorCanvas.height = height*scale
+const ctx = editorCanvas.getContext("2d")
 
 let mousedown = false
 let lastmx, lastmy
 
+const toggleEditor = () => {
+    showEditor = !showEditor
+    if (showEditor) {
+        calculateCanvasScale()
+        document.getElementById("editorDiv").appendChild(dimCanvas)
+        document.getElementById("editorDiv").appendChild(editorCanvas)
+    } else {
+        document.getElementById("editorDiv").removeChild(dimCanvas)
+        document.getElementById("editorDiv").removeChild(editorCanvas)
+    }
+}
+
 // make the canvas dynamically resize to the window
 const calculateCanvasScale = () => {
     scale = Math.min(Math.round((innerWidth-200)/width), 10)
-    canvas.style.left = innerWidth/2 - width*scale/2 + "px"
-    canvas.width = width*scale
-    canvas.height = height*scale
+    editorCanvas.style.left = innerWidth/2 - width*scale/2 + "px"
+    editorCanvas.style.top = innerHeight/2 - height*scale/2 + "px"
+    editorCanvas.width = width*scale
+    editorCanvas.height = height*scale
     refreshCanvas()
+
+    dimCanvas.width = innerWidth
+    dimCanvas.height = innerHeight
+    dimCanvas.style.top = "0px"
+    dimCanvas.style.left = "0px"
+    let dctx = dimCanvas.getContext("2d")
+    dctx.fillStyle = "black"
+    dctx.globalAlpha = 0.75
+    dctx.fillRect(0,0, dimCanvas.width, dimCanvas.height)
 }
 calculateCanvasScale()
 window.addEventListener("resize", calculateCanvasScale)
@@ -92,7 +108,7 @@ document.addEventListener("mouseup", (event) => {
     mousedown = false
 })
 
-canvas.addEventListener("mousedown", (event) => {
+editorCanvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
@@ -100,7 +116,7 @@ canvas.addEventListener("mousedown", (event) => {
     refreshCanvas()
 })
 
-canvas.addEventListener("mousemove", (event) => {
+editorCanvas.addEventListener("mousemove", (event) => {
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
 

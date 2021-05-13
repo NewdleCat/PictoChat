@@ -1,6 +1,3 @@
-const width = 128
-const height = 64
-
 for (const image of images) {
 	const scale = 2
 	const canvas = document.createElement("canvas")
