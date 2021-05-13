@@ -21,43 +21,65 @@
 	}
 
 	#editorCanvas {
-		position: absolute;
+		position: fixed;
 	}
 
-	#dimCanvas {
-		position: absolute;
+	#dim {
+		position: fixed;
 		padding: 0;
 		margin: 0;
-		display: block;
+		width: 100vw;
+		height: 100vh;
 		left: 0px;
 		top: 0px;
+		background-color: rgba(0,0,0, 0.75);
 	}
 
 	#editorPostButton {
-		position: absolute;
-		padding: 0;
-		margin: 0;
-		display: block;
+		position: fixed;
 		left: 120px;
 		top: 120px;
 	}
 </style>
 
+<template id="_editorCloseButton">
+	<a class="button is-danger" onclick="toggleEditor(); clearData()" id="editorCloseButton" style="position: fixed">
+		<span class="icon">
+			<i class="fa fa-fw fa-times"></i>
+		</span>
+	</a>
+</template>
+
+<template id="_editorPostButton">
+	<a class="button is-success" onclick="dataToString()" id="editorPostButton" style="position: fixed; padding: 32px; padding-left: 64px; padding-right: 64px">
+		<span>
+			Post!
+		</span>
+	</a>
+</template>
+
+<template id="_editButton">
+	<a class="button is-primary" onclick="toggleEditor()" id="editButton" style="position: fixed">
+		<span>
+			<span class="icon">
+				<i class="fa fa-fw fa-pencil"></i>
+			</span>
+			New Picto
+		</span>
+	</a>
+</template>
+
+<template id="_dim">
+	<div id="dim"></div>
+</template>
+
 <div class="section">
 	<div id="editorDiv">
 		<canvas id="editorCanvas"></canvas>
-		<canvas id="dimCanvas"></canvas>
 	</div>
 
 	<input id="codeInput" type="text">
 	<input type="button" value="Add Friend" onclick="test()">
-
-	<a class="button is-warning" onclick="toggleEditor()">
-		<span class="icon">
-			<i class="fa fa-fw fa-pencil"></i>
-		</span>
-		<span>Edit</span>
-	</a>
 
 	<div id="drawings"></div>
 </div>
