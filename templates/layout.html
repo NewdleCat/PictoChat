@@ -1,5 +1,7 @@
 <!DOCTYPE html>
+
 <html lang="en">
+  
   <head>
     <base href="[[=URL('static')]]/">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -11,6 +13,10 @@
   </head>
   <body>
     <!-- Navigation bar -->
+    <script src="js/sugar.min.js"></script>
+    <script src="js/axios.min.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/utils.js"></script>
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="[[=URL('index')]]">
@@ -68,9 +74,6 @@
     </footer>
       -->
   </body>
-  <script src="js/sugar.min.js"></script>
-  <script src="js/axios.min.js"></script>
-  <script src="js/vue.js"></script>
-  <script src="js/utils.js"></script>
+  
   [[block page_scripts]]<!-- individual pages can add scripts here -->[[end]]
 </html>

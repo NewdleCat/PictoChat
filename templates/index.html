@@ -9,9 +9,15 @@
 		}
 	[[pass]]
 </script> 
+
 <script src="js/viewer.js"></script>
 
 <div class="section">
+
+	<div id="overlay">
+  		<span v-if="seen">Now you see me</span>
+	</div>
+
 	<a class="button is-warning" href="[[=URL('editor')]]">
 	   <span class="icon">
 	   		<i class="fa fa-fw fa-pencil"></i> 
@@ -19,3 +25,5 @@
 	   <span>Edit</span>
    	</a>
 </div>
+
+<script src="js/index.js"></script>
