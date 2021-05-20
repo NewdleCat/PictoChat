@@ -60,7 +60,12 @@ const dataToString = () => {
     }
     // return str
     let link = window.location.href
-    window.location.href = link.substring(0, link.length - 5) + "post/" + str
+    let title = document.getElementById("editorTitleVal").value
+    
+    if (title == "")
+        title = "untitled"
+
+    window.location.href = link.substring(0, link.length - 5) + "post/" + str + "/" + title
 }
 
 const editorCanvas = document.getElementById("editorCanvas")

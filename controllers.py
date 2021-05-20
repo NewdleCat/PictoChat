@@ -32,6 +32,8 @@ from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 import uuid
 from operator import itemgetter 
+from py4web.utils.form import Form, FormStyleBulma
+
 url_signer = URLSigner(session)
 
 @action('index')
@@ -42,7 +44,7 @@ def index():
 
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
-        db.friend_code.insert(uuid=uuid.uuid4())
+        db.friend_code.insert(uuid=uuid.uuid4(), user_name=user)
 
     data = db(db.drawing.user_email == user).select().as_list()
     following = db(db.friend_code.user_email == user).select()[0]['following']
@@ -97,12 +99,12 @@ def add_friend(uuid = None):
     redirect(URL('index'))
     return dict()
 
-@action('post/<image_data>',method=["POST", "GET"])
+@action('post/<image_data>/<image_title>',method=["POST", "GET"])
 @action.uses(db, session, auth)
-def post(image_data = None):
+def post(image_data = None, image_title = None):
     assert image_data is not None
-    print(image_data)
-    db.drawing.insert(title = "temporary title", image_data = image_data)
+    assert image_title is not None
+    db.drawing.insert(title = image_title, image_data = image_data)
     redirect(URL('index'))
     return dict()
 
@@ -113,8 +115,20 @@ def delete_image(image_id = None):
     db(db.drawing.id == image_id).delete()
     redirect(URL('index'))
 
-@action('edit_profile', method=["POST", "GET"])
-@action.uses(db, session, auth.user)
-def edit_profile():
-    db(db.drawing.id == image_id).delete()
-    redirect(URL('index'))
+@action('edit_username', method=["GET", "POST"])
+@action.uses(db, session, auth.user, "edit_username.html")
+def edit_username():
+    user = db(db.friend_code.user_email == get_user_email()).select()
+    user = user[0]
+    if user is None:
+        redirect(URL('index'))
+    form = Form(db.friend_code, record=user, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
+    if form.accepted:
+        redirect(URL('index'))
+    return dict(form = form)
+
+# @action('edit_profile', method=["POST", "GET"])
+# @action.uses(db, session, auth.user)
+# def edit_profile():
+#     db(db.drawing.id == image_id).delete()
+#     redirect(URL('index'))

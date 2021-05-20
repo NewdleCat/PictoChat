@@ -13,7 +13,6 @@ def get_user_email():
 def get_time():
     return datetime.datetime.utcnow()
 
-
 ### Define your table below
 #
 # db.define_table('thing', Field('name'))
@@ -26,14 +25,20 @@ db.define_table(
     Field('image_data', requires=IS_NOT_EMPTY()),
     Field('date_added', type="datetime", default=get_time),
     Field('user_email', default=get_user_email),
+    Field('user_name'),
 )
 db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 
 db.define_table(
 	'friend_code',
+    Field('user_name', requires=IS_NOT_EMPTY()),
 	Field('uuid', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
     Field('following', type='list:string'),
 )
+db.friend_code.id.readable = db.friend_code.id.writable = False 
+db.friend_code.user_email.readable = db.friend_code.user_email.writable = False 
+db.friend_code.uuid.readable = db.friend_code.uuid.writable = False 
+db.friend_code.following.readable = db.friend_code.following.writable = False 
 
 db.commit()
