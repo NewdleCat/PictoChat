@@ -127,23 +127,17 @@ def edit_username():
         redirect(URL('index'))
     form = Form(db.friend_code, record=user, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted:
-        updateDrawingUsernames()
+        updateDrawingUsernames(user)
         redirect(URL('index'))
     return dict(form = form)
 
-def updateDrawingUsernames():
-    
-    user = db(db.friend_code.user_email == get_user_email()).select()
-    
-    username = user[0].user_name
+def updateDrawingUsernames(user):
+    username = user.user_name
     drawingsToUpdate = db(db.drawing.user_email == get_user_email()).select()
-
     print("NUM of DRAWINGS: ", len(drawingsToUpdate))
     for d in drawingsToUpdate:
         print("---USERNAME: ",d.user_name)
         db.drawing.update_or_insert((db.drawing.user_email==get_user_email()) & (db.drawing.date_added==d.date_added), user_name=username)
-
-    pass
 
 # @action('edit_profile', method=["POST", "GET"])
 # @action.uses(db, session, auth.user)
