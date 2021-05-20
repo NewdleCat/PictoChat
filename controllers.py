@@ -73,27 +73,26 @@ def index():
 def editor():
     return dict()
 
-@action('add_friend/<uuid>')
+@action('add_friend/<friend_email>')
 @action.uses(db, session, auth)
-def add_friend(uuid = None):
-    assert uuid is not None
-    if uuid == "":
+def add_friend(friend_email = None):
+    assert friend_email is not None
+    if friend_email == "":
         redirect(URL('index'))
 
     user = get_user_email()
-    print("YAA")
-    friend = db(db.friend_code.uuid == uuid).select()
+    friend = db(db.friend_code.user_email == friend_email).select()
     you = db(db.friend_code.user_email == user).select()
+    
     if len(friend) == 0:
         redirect(URL('index'))
 
     followingList = you[0]['following']
-    friendName = friend[0]['user_email'] 
     if followingList == None:
         followingList = []
-    if friendName not in followingList:
-        followingList.append(friendName)
-    if friendName != user:
+    if friend_email not in followingList:
+        followingList.append(friend_email)
+    if friend_email != user:
         db.friend_code.update_or_insert(db.friend_code.user_email == user, following = followingList)
 
     redirect(URL('index'))
