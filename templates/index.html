@@ -54,6 +54,7 @@
 
 <template id="_editorToolMenu">
 	<div id="editorToolMenu">
+		<button class="editorToolMenuButton" id="pencil_editortool" onclick="brush.menuSelect('pencil')"> <i class="fa fa-pencil-alt" style="font-size: 3em;"></i> </button> <br>
 		<button class="editorToolMenuButton" id="brush_editortool" onclick="brush.menuSelect('brush')"> <i class="fa fa-paint-brush" style="font-size: 3em;"></i> </button> <br>
 		<button class="editorToolMenuButton" id="eraser_editortool" onclick="brush.menuSelect('eraser')"> <i class="fa fa-eraser" style="font-size: 3em;"></i> </button> <br>
 		<button class="editorToolMenuButton" id="text_editortool" onclick="brush.menuSelect('text')"> <i class="fa fa-font" style="font-size: 3em;"></i> </button> <br>
@@ -115,7 +116,6 @@
 <script>
 	const width = 128
 	const height = 64
-	let showEditor = true
 
 	// automatically move over to /index if user is not explicitly on /index
 	let link = window.location.href

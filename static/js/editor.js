@@ -45,6 +45,8 @@ const brush = {
                 stack.push([x, y-1])
             }
         }
+
+        editor.setPixel(this.x, this.y, this.color)
     },
 
     draw() {
@@ -72,12 +74,22 @@ const brush = {
         this.updatePosition()
         this.lastx = undefined
         this.lasty = undefined
+        if (editor.backupIndex != editor.backupMax) editor.createBackup()
         this.draw()
+    },
+
+    mouseup(event) {
+        this.down = false
+        editor.createBackup()
     },
 
     mousemove(event) {
         this.updatePosition()
         if (!this.draw()) editor.refresh()
+    },
+
+    keypress(event) {
+        // TODO type letters
     },
 
     menuSelect(selection) {
@@ -98,6 +110,8 @@ const brush = {
 
         this.color = 1
         this.mode = "brush"
+        this.size = 1
+        if (selection == "pencil") this.size = 0
         if (selection == "eraser") this.color = 0
         if (selection == "fill") {
             this.mode = "fill"
@@ -109,10 +123,15 @@ const editor = {
     data: [],
     scale: 1,
     canvas: document.getElementById("editorCanvas"),
+    backups: [],
+    backupIndex: 0,
+    backupMax: 0,
+    show: true,
 
     clear() {
         this.data = []
-        for (let i=0; i<width; i++) this.data[i] = []
+        for (let x=0; x<width; x++)
+            this.data[x] = []
     },
 
     setPixel(x, y, value) {
@@ -178,13 +197,44 @@ const editor = {
                 }
 
                 // draw the user's brush cursor
-                if (Math.ceil(dist(x+0.5,y+0.5, brush.x,brush.y)) <= brush.size) {
+                if (Math.ceil(dist(x+0.5,y+0.5, brush.x,brush.y)) <= brush.size
+                || (x == brush.x && y == brush.y)) {
                     ctx.beginPath()
                     ctx.rect(x*scale,y*scale, scale,scale)
                     ctx.stroke()
                 }
             }
         }
+    },
+
+    // create undo
+    createBackup() {
+        console.log(zip(this.serialize()))
+        this.backups[this.backupIndex] = JSON.stringify(this.data)
+        this.backupIndex += 1
+        this.backupMax = this.backupIndex
+    },
+
+    undo() {
+        if (this.backupIndex <= 0) return
+        console.log("undo")
+        if (this.backupIndex == this.backupMax) this.backupIndex -= 1
+        this.backupIndex -= 1
+        this.data = JSON.parse(this.backups[this.backupIndex])
+        this.refresh()
+    },
+
+    redo() {
+        if (this.backupIndex >= this.backupMax-1) return
+        console.log("redo")
+        this.backupIndex += 1
+        this.data = JSON.parse(this.backups[this.backupIndex])
+        this.refresh()
+    },
+
+    keypress(event) {
+        if (event.ctrlKey && event.key == "z") this.undo()
+        if (event.ctrlKey && event.key == "Z") this.redo()
     },
 
     close() {
@@ -195,7 +245,7 @@ const editor = {
 
 // put things on the page
 const toggleEditor = () => {
-    showEditor = !showEditor
+    editor.show = !editor.show
 
     const remove = e => {
         if (e) {
@@ -203,7 +253,7 @@ const toggleEditor = () => {
         }
     }
 
-    if (showEditor) {
+    if (editor.show) {
         document.getElementById("editorDiv").appendChild(fromTemplate("_dim"))
         document.getElementById("editorDiv").appendChild(editor.canvas)
         document.body.appendChild(fromTemplate("_editorPostButton"))
@@ -213,6 +263,7 @@ const toggleEditor = () => {
 
         remove(document.getElementById("editButton"))
         remove(document.getElementById("friendInput"))
+        brush.menuSelect("brush")
 
         calculateCanvasScale()
     } else {
@@ -281,10 +332,88 @@ const calculateCanvasScale = () => {
     }
 }
 
-document.addEventListener("mouseup", event => brush.down = false)
+// Apply LZW-compression to a string and return base64 compressed string.
+function zip (s) {
+    try {
+        var dict = {}
+        var data = (s + '').split('')
+        var out = []
+        var currChar
+        var phrase = data[0]
+        var code = 256
+        for (var i = 1; i < data.length; i++) {
+            currChar = data[i]
+            if (dict[phrase + currChar] != null) {
+                phrase += currChar
+            } else {
+                out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0))
+                dict[phrase + currChar] = code
+                code++
+                phrase = currChar
+            }
+        }
+        out.push(phrase.length > 1 ? dict[phrase] : phrase.charCodeAt(0))
+        for (var j = 0; j < out.length; j++) {
+            out[j] = String.fromCharCode(out[j])
+        }
+        return utoa(out.join(''))
+    } catch (e) {
+        console.log('Failed to zip string return empty string', e)
+        return ''
+    }
+}
+
+// Decompress an LZW-encoded base64 string
+function unzip (base64ZippedString) {
+    try {
+        var s = atou(base64ZippedString)
+        var dict = {}
+        var data = (s + '').split('')
+        var currChar = data[0]
+        var oldPhrase = currChar
+        var out = [currChar]
+        var code = 256
+        var phrase
+        for (var i = 1; i < data.length; i++) {
+            var currCode = data[i].charCodeAt(0)
+            if (currCode < 256) {
+                phrase = data[i]
+            } else {
+                phrase = dict[currCode] ? dict[currCode] : oldPhrase + currChar
+            }
+            out.push(phrase)
+            currChar = phrase.charAt(0)
+            dict[code] = oldPhrase + currChar
+            code++
+            oldPhrase = phrase
+        }
+        return out.join('')
+    } catch (e) {
+        console.log('Failed to unzip string return empty string', e)
+        return ''
+    }
+}
+
+// ucs-2 string to base64 encoded ascii
+function utoa (str) {
+  return window.btoa(unescape(encodeURIComponent(str)))
+}
+// base64 encoded ascii to ucs-2 string
+function atou (str) {
+  return decodeURIComponent(escape(window.atob(str)))
+}
+
+document.addEventListener("keydown", event => {
+    if (event.ctrlKey && (event.key == "z" || event.key == "Z"))
+        event.preventDefault()
+    editor.keypress(event)
+    brush.keypress(event)
+}, false);
+document.addEventListener("mouseup", event => brush.mouseup(event))
 editor.canvas.addEventListener("mousedown", event => brush.mousedown(event))
 editor.canvas.addEventListener("mousemove", event => brush.mousemove(event))
 editor.clear()
+editor.createBackup()
 calculateCanvasScale()
 toggleEditor()
 drawFeed()
