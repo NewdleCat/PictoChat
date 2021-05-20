@@ -1,0 +1,86 @@
+#drawings {
+  width: min(100vw, 750px);
+  padding-left: 0;
+  padding-right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+#editorCanvas {
+  position: fixed;
+}
+
+.feedCanvas {
+  display: block;
+  border-color: black;
+  border: dashed;
+  margin-left: auto;
+  margin-right: auto;
+  padding: none;
+}
+
+input {
+  width: 100%;
+  background-color: #00000000;
+  color: white;
+  border: none;
+  font-size: 3em;
+  text-align: center;
+  text-shadow: 3px 3px black;
+}
+
+#dim {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
+  left: 0px;
+  top: 0px;
+  background-color: rgba(0,0,0, 0.75);
+}
+
+#editorPostButton {
+  position: fixed;
+  left: 120px;
+  top: 120px;
+}
+
+#editButton {
+  position: fixed;
+  height: 100px;
+  padding-left: 64px;
+  padding-right: 64px;
+}
+
+#editorToolMenu {
+  position: fixed;
+  border-style: dashed;
+  border-color: gray;
+  color: white;
+}
+
+.editorToolMenuButton {
+  width: 64px;
+  height: 64px;
+  background-color: #00000000;
+  border: none;
+  color: white;
+  border: solid;
+  border-style: solid;
+  border-color: #00000000;
+}
+
+.editorToolMenuButton:hover {
+  border: dashed;
+  border-color: #4488ff;
+}
+
+:root {
+  background-color: #ddd;
+}
+
+#inputs {
+  z-index: 10;
+}
