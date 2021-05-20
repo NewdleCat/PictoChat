@@ -165,6 +165,9 @@ const editor = {
     show: true,
 
     clear() {
+        this.backups = []
+        this.backupIndex = 0
+        this.backupMax = 0
         this.data = []
         for (let x=0; x<width; x++)
             this.data[x] = []
