@@ -27,7 +27,7 @@ db.define_table(
     Field('user_email', default=get_user_email),
     Field('user_name'),
 )
-db.drawing.user_email.readable = db.drawing.user_email.writable = False 
+# db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 
 db.define_table(
 	'friend_code',

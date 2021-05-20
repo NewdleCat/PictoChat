@@ -73,27 +73,26 @@ def index():
 def editor():
     return dict()
 
-@action('add_friend/<uuid>')
+@action('add_friend/<friend_email>')
 @action.uses(db, session, auth)
-def add_friend(uuid = None):
-    assert uuid is not None
-    if uuid == "":
+def add_friend(friend_email = None):
+    assert friend_email is not None
+    if friend_email == "":
         redirect(URL('index'))
 
     user = get_user_email()
-    print("YAA")
-    friend = db(db.friend_code.uuid == uuid).select()
+    friend = db(db.friend_code.user_email == friend_email).select()
     you = db(db.friend_code.user_email == user).select()
+    
     if len(friend) == 0:
         redirect(URL('index'))
 
     followingList = you[0]['following']
-    friendName = friend[0]['user_email'] 
     if followingList == None:
         followingList = []
-    if friendName not in followingList:
-        followingList.append(friendName)
-    if friendName != user:
+    if friend_email not in followingList:
+        followingList.append(friend_email)
+    if friend_email != user:
         db.friend_code.update_or_insert(db.friend_code.user_email == user, following = followingList)
 
     redirect(URL('index'))
@@ -104,7 +103,10 @@ def add_friend(uuid = None):
 def post(image_data = None, image_title = None):
     assert image_data is not None
     assert image_title is not None
-    db.drawing.insert(title = image_title, image_data = image_data)
+    user = db(db.friend_code.user_email == get_user_email()).select()
+    user = user[0].user_name
+    print("YAAA: ",user)
+    db.drawing.insert(title = image_title, image_data = image_data, user_name = user)
     redirect(URL('index'))
     return dict()
 
@@ -124,8 +126,17 @@ def edit_username():
         redirect(URL('index'))
     form = Form(db.friend_code, record=user, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted:
+        updateDrawingUsernames(user)
         redirect(URL('index'))
     return dict(form = form)
+
+def updateDrawingUsernames(user):
+    username = user.user_name
+    drawingsToUpdate = db(db.drawing.user_email == get_user_email()).select()
+    print("NUM of DRAWINGS: ", len(drawingsToUpdate))
+    for d in drawingsToUpdate:
+        print("---USERNAME: ",d.user_name)
+        db.drawing.update_or_insert((db.drawing.user_email==get_user_email()) & (db.drawing.date_added==d.date_added), user_name=username)
 
 # @action('edit_profile', method=["POST", "GET"])
 # @action.uses(db, session, auth.user)
