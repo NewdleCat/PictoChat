@@ -95,8 +95,8 @@ const brush = {
     },
 
     mouseup(event) {
+        if (this.down) editor.createBackup()
         this.down = false
-        editor.createBackup()
     },
 
     mousemove(event) {
@@ -146,6 +146,7 @@ const brush = {
         }
         if (selection == "fill") {
             this.mode = "fill"
+            this.size = 0
         }
         if (selection == "spraycan") {
             this.mode = "spraycan"
