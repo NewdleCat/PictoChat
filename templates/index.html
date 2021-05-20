@@ -20,7 +20,7 @@
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
 <template id="_editorCloseButton">
-	<a class="button is-danger" onclick="toggleEditor(); clearData()" id="editorCloseButton" style="position: fixed">
+	<a class="button is-danger" onclick="editor.close()" id="editorCloseButton" style="position: fixed">
 		<span class="icon">
 			<i class="fa fa-fw fa-times"></i>
 		</span>
@@ -28,7 +28,7 @@
 </template>
 
 <template id="_editorPostButton">
-	<a class="button is-success" onclick="dataToString()" id="editorPostButton" style="position: fixed; padding: 32px; padding-left: 64px; padding-right: 64px">
+	<a class="button is-success" onclick="editor.post()" id="editorPostButton" style="position: fixed; padding: 32px; padding-left: 64px; padding-right: 64px">
 		<span>
 			Post!
 		</span>
@@ -54,10 +54,10 @@
 
 <template id="_editorToolMenu">
 	<div id="editorToolMenu">
-		<button class="editorToolMenuButton" id="brush_editortool" onclick="changeEditorMenuSelection('brush')"> <i class="fa fa-paint-brush" style="font-size: 3em;"></i> </button> <br>
-		<button class="editorToolMenuButton" id="eraser_editortool" onclick="changeEditorMenuSelection('eraser')"> <i class="fa fa-eraser" style="font-size: 3em;"></i> </button> <br>
-		<button class="editorToolMenuButton" id="text_editortool" onclick="changeEditorMenuSelection('text')"> <i class="fa fa-font" style="font-size: 3em;"></i> </button> <br>
-		<button class="editorToolMenuButton" id="fill_editortool" onclick="changeEditorMenuSelection('fill')"> <i class="fa fa-fill-drip" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton" id="brush_editortool" onclick="editor.menuSelect('brush')"> <i class="fa fa-paint-brush" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton" id="eraser_editortool" onclick="editor.menuSelect('eraser')"> <i class="fa fa-eraser" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton" id="text_editortool" onclick="editor.menuSelect('text')"> <i class="fa fa-font" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton" id="fill_editortool" onclick="editor.menuSelect('fill')"> <i class="fa fa-fill-drip" style="font-size: 3em;"></i> </button> <br>
 	</div>
 </template>
 
