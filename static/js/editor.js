@@ -4,15 +4,57 @@ const brush = {
     size: 1,
     x: undefined,
     y: undefined,
+    down: false,
+    lastx: undefined,
+    lasty: undefined,
 
-    draw(x,y) {
-        editor.setPixel(x,y,this.color)
+    drawcircle(x, y) {
+        editor.setPixel(x, y, this.color)
         for (let r=0; r<this.size; r+=0.5) {
             for (let a=0; a<Math.PI*2; a+=Math.PI/8) {
                 editor.setPixel(x + Math.cos(a)*r, y + Math.sin(a)*r, this.color)
             }
         }
     },
+
+    draw() {
+        if (!this.down) return false
+
+        if (!this.lastx) this.lastx = this.x
+        if (!this.lasty) this.lasty = this.y
+
+        // draw a line between last point and this point
+        const dist = Math.sqrt((this.x-this.lastx)**2 + (this.y-this.lasty)**2)
+        const angle = Math.atan2(this.y-this.lasty, this.x-this.lastx)
+
+        for (let i=0; i<=dist; i++) {
+            const x = this.lastx + Math.cos(angle)*i
+            const y = this.lasty + Math.sin(angle)*i
+            this.drawcircle(x, y)
+        }
+
+        this.lastx = event.offsetX/editor.scale
+        this.lasty = event.offsetY/editor.scale
+
+        editor.refresh()
+
+        return true
+    },
+
+    mousedown(event) {
+        this.down = true
+        this.x = event.offsetX/editor.scale
+        this.y = event.offsetY/editor.scale
+        this.lastx = undefined
+        this.lasty = undefined
+        this.draw()
+    },
+
+    mousemove(event) {
+        this.x = event.offsetX/editor.scale
+        this.y = event.offsetY/editor.scale
+        if (!this.draw()) editor.refresh()
+    }
 }
 
 const editor = {
@@ -88,7 +130,7 @@ const editor = {
                 }
 
                 // draw the user's brush cursor
-                if (dist(x+0.5,y+0.5, brush.x,brush.y) <= brush.size) {
+                if (Math.ceil(dist(x+0.5,y+0.5, brush.x,brush.y)) <= brush.size) {
                     ctx.beginPath()
                     ctx.rect(x*scale,y*scale, scale,scale)
                     ctx.stroke()
@@ -211,50 +253,11 @@ const calculateCanvasScale = () => {
     }
 }
 
-document.addEventListener("mouseup", (event) => {
-    mousedown = false
-})
-
-editor.canvas.addEventListener("mousedown", (event) => {
-    mousedown = true
-    const mx = event.offsetX/editor.scale
-    const my = event.offsetY/editor.scale
-    brush.x = mx
-    brush.y = my
-
-    brush.draw(mx,my,brush.size,brush.color)
-    editor.refresh()
-})
-
-editor.canvas.addEventListener("mousemove", (event) => {
-    const mx = event.offsetX/editor.scale
-    const my = event.offsetY/editor.scale
-    brush.x = mx
-    brush.y = my
-
-    if (!lastmx) lastmx = mx
-    if (!lastmy) lastmy = my
-
-    if (mousedown) {
-        // draw a line between last point and this point
-        const dist = Math.sqrt((mx-lastmx)**2 + (my-lastmy)**2)
-        const angle = Math.atan2(my-lastmy, mx-lastmx)
-        for (let i=0; i<=dist; i++) {
-            let x = lastmx + Math.cos(angle)*i
-            let y = lastmy + Math.sin(angle)*i
-            brush.draw(x,y,brush.size,brush.color)
-        }
-    }
-
-    editor.refresh()
-
-    lastmx = mx
-    lastmy = my
-})
-
-// on startup
+document.addEventListener("mouseup", event => brush.down = false)
+editor.canvas.addEventListener("mousedown", event => brush.mousedown(event))
+editor.canvas.addEventListener("mousemove", event => brush.mousemove(event))
 editor.clear()
-let mousedown = false
-let lastmx, lastmy
 calculateCanvasScale()
+toggleEditor()
+drawFeed()
 window.addEventListener("resize", calculateCanvasScale)

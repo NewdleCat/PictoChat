@@ -117,6 +117,12 @@
 	const height = 64
 	let showEditor = true
 
+	// automatically move over to /index if user is not explicitly on /index
+	let link = window.location.href
+	if (link.substring(link.length-5,link.length) != "index") {
+		window.location.href += "/index"
+	}
+
 	const fromTemplate = (template) => {
 		return document.getElementById(template).content.firstElementChild.cloneNode(true)
 	}
@@ -137,4 +143,3 @@
 </script>
 <script src="js/viewer.js"></script>
 <script src="js/editor.js"></script>
-<script> toggleEditor() </script>

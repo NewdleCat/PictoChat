@@ -1,19 +1,16 @@
-function removeAllChildNodes() {
-	const parent = document.getElementById('drawings')
-    while (parent.firstChild) {
-    	parent.removeChild(parent.lastChild);
-	}
-}
-
-const toUserProfile = (name) => {
-	console.log(name)
+const toUserProfile = name => {
 	let link = window.location.href
     window.location.href = link.substring(0, link.length - 5) + "index/" + name
 }
+
 const drawFeed = () => {
 	if (document.getElementById("drawings").childElementCount > 0) {
-		removeAllChildNodes()
+		const parent = document.getElementById('drawings')
+		while (parent.firstChild) {
+			parent.removeChild(parent.lastChild);
+		}
 	}
+
     for (const image of images) {
 		const feedEntry = fromTemplate("_feedEntry")
 		document.getElementById("drawings").appendChild(feedEntry)
@@ -69,7 +66,4 @@ const drawFeed = () => {
 	}
 }
 
-
-drawFeed()
 window.addEventListener("resize", drawFeed)
-
