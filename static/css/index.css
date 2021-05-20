@@ -62,21 +62,19 @@ input {
 }
 
 .editorToolMenuButton {
-  padding-top: 1em;
-  padding-bottom: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
+  width: 64px;
+  height: 64px;
   background-color: #00000000;
   border: none;
   color: white;
+  border: solid;
+  border-style: solid;
+  border-color: #00000000;
 }
 
 .editorToolMenuButton:hover {
-  padding-top: 1em;
-  padding-bottom: 1em;
-  padding-left: 1em;
-  padding-right: 1em;
-  color: #4488ff;
+  border: dashed;
+  border-color: #4488ff;
 }
 
 :root {

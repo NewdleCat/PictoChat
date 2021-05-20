@@ -9,6 +9,12 @@ const clearData = () => {
 }
 clearData()
 
+// the brush
+let brush = {
+    color: 1,
+    size: 1,
+}
+
 const setPixel = (x, y, value) => {
     x = Math.floor(x)
     y = Math.floor(y)
@@ -46,6 +52,26 @@ const refreshCanvas = () => {
     }
 }
 
+const changeEditorMenuSelection = selection => {
+    // hackily refresh the menu by removing it and re-adding it
+    document.body.removeChild(document.getElementById("editorToolMenu"))
+    document.body.appendChild(fromTemplate("_editorToolMenu"))
+    calculateCanvasScale()
+
+    // highlight the selected tool
+    const menu = document.getElementById("editorToolMenu")
+    for (const thing of menu.children) {
+        if (thing.id == selection + "_editortool") {
+            thing.style.color = "#4488ff"
+            thing.style.borderColor = "#4488ff"
+            thing.style.borderStyle = "solid"
+        }
+    }
+
+    if (selection == "brush")  brush.color = 1
+    if (selection == "eraser") brush.color = 0
+}
+
 // converts the canvas data to a hexidecimal string
 const dataToString = () => {
     let str = ""
@@ -70,8 +96,6 @@ const dataToString = () => {
 
 const editorCanvas = document.getElementById("editorCanvas")
 let scale
-let brushSize = 1
-let brushColor = 1
 editorCanvas.width = width*scale
 editorCanvas.height = height*scale
 const ctx = editorCanvas.getContext("2d")
@@ -177,7 +201,7 @@ editorCanvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
-    drawCircle(x,y,brushSize,brushColor)
+    drawCircle(mx,my,brush.size,brush.color)
     refreshCanvas()
 })
 
@@ -196,7 +220,7 @@ editorCanvas.addEventListener("mousemove", (event) => {
             let x = lastmx + Math.cos(angle)*i
             let y = lastmy + Math.sin(angle)*i
 
-            drawCircle(x,y,brushSize,brushColor)
+            drawCircle(x,y,brush.size,brush.color)
         }
 
         refreshCanvas()
