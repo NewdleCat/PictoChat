@@ -24,7 +24,11 @@ const setPixel = (x, y, value) => {
 }
 
 const getPixel = (x, y) => {
-    return data[Math.floor(x)][Math.floor(y)]
+    x = Math.floor(x)
+    y = Math.floor(y)
+
+    if (x < 0 || x >= 128 || y < 0 || y >= 64) return -1
+    return data[x][y]
 }
 
 const drawCircle = (x, y, radius, value) => {
@@ -41,12 +45,23 @@ const refreshCanvas = () => {
     ctx.fillStyle = "white"
     ctx.fillRect(0,0, editorCanvas.width, editorCanvas.height)
 
+    const dist = (x1,y1,x2,y2) => {
+        return Math.sqrt((x1-x2)**2 + (y1-y2)**2)
+    }
+
     // go through and fill in the black pixels
     ctx.fillStyle = "black"
     for (let x=0; x<width; x++) {
         for (let y=0; y<height; y++) {
             if (getPixel(x,y)) {
                 ctx.fillRect(x*scale,y*scale, scale,scale)
+            }
+
+            // draw the user's brush cursor
+            if (dist(x+0.5,y+0.5, brush.x,brush.y) <= brush.size) {
+                ctx.beginPath()
+                ctx.rect(x*scale,y*scale, scale,scale)
+                ctx.stroke()
             }
         }
     }
@@ -201,6 +216,9 @@ editorCanvas.addEventListener("mousedown", (event) => {
     mousedown = true
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
+    brush.x = mx
+    brush.y = my
+
     drawCircle(mx,my,brush.size,brush.color)
     refreshCanvas()
 })
@@ -208,6 +226,8 @@ editorCanvas.addEventListener("mousedown", (event) => {
 editorCanvas.addEventListener("mousemove", (event) => {
     const mx = event.offsetX/scale
     const my = event.offsetY/scale
+    brush.x = mx
+    brush.y = my
 
     if (!lastmx) lastmx = mx
     if (!lastmy) lastmy = my
@@ -222,9 +242,9 @@ editorCanvas.addEventListener("mousemove", (event) => {
 
             drawCircle(x,y,brush.size,brush.color)
         }
-
-        refreshCanvas()
     }
+
+    refreshCanvas()
 
     lastmx = mx
     lastmy = my
