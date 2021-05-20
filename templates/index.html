@@ -37,6 +37,16 @@
 		padding: none;
 	}
 
+	input {
+		width: 100%;
+		background-color: #00000000;
+		color: white;
+		border: none;
+		font-size: 3em;
+		text-align: center;
+		text-shadow: 3px 3px black;
+	}
+
 	#dim {
 		position: fixed;
 		padding: 0;
@@ -95,6 +105,12 @@
 			New Picto
 		</span>
 	</a>
+</template>
+
+<template id="_editorTitle">
+	<div class="field" id="editorTitle" style="position: fixed;">
+		<input type="title" placeholder="My awesome picto">
+	</div>
 </template>
 
 <template id="_dim">
