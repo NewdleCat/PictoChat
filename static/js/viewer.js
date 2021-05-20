@@ -34,6 +34,10 @@ const drawFeed = () => {
 			trash.innerHTML = `<a class="level-item" aria-label="like"><span class="icon is-small"><i class="fa fa-trash" aria-hidden="true" onclick="deleteImage(${image.id})"></i></span> </a>`
 		}
 
+		const get = (x,y,scale) => {
+			return [Math.floor(x*scale), Math.floor(y*scale), Math.ceil(scale), Math.ceil(scale)]
+		}
+
 		let x = 0
 		let y = 0
 		for (let i=0; i<image.data.length; i++) {
@@ -41,19 +45,23 @@ const drawFeed = () => {
 
 			if (n >= 8) {
 				n -= 8
-				ctx.fillRect((x+3)*scale,y*scale, scale,scale)
+				let [sx, sy, sw, sh] = get(x+3, y, scale)
+				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 4) {
 				n -= 4
-				ctx.fillRect((x+2)*scale,y*scale, scale,scale)
+				let [sx, sy, sw, sh] = get(x+2, y, scale)
+				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 2) {
 				n -= 2
-				ctx.fillRect((x+1)*scale,y*scale, scale,scale)
+				let [sx, sy, sw, sh] = get(x+1, y, scale)
+				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 1) {
 				n -= 1
-				ctx.fillRect(x*scale,y*scale, scale,scale)
+				let [sx, sy, sw, sh] = get(x, y, scale)
+				ctx.fillRect(sx,sy,sw,sh)
 			}
 
 			x += 4
