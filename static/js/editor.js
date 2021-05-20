@@ -1,4 +1,3 @@
-// the brush
 const brush = {
     color: 1,
     size: 1,
@@ -7,54 +6,103 @@ const brush = {
     down: false,
     lastx: undefined,
     lasty: undefined,
+    mode: "brush",
 
-    drawcircle(x, y) {
+    drawcircle(x, y, radius) {
         editor.setPixel(x, y, this.color)
-        for (let r=0; r<this.size; r+=0.5) {
+        for (let r=0; r<radius; r+=0.5) {
             for (let a=0; a<Math.PI*2; a+=Math.PI/8) {
                 editor.setPixel(x + Math.cos(a)*r, y + Math.sin(a)*r, this.color)
             }
         }
     },
 
-    draw() {
-        if (!this.down) return false
-
-        if (!this.lastx) this.lastx = this.x
-        if (!this.lasty) this.lasty = this.y
-
+    drawline() {
         // draw a line between last point and this point
         const dist = Math.sqrt((this.x-this.lastx)**2 + (this.y-this.lasty)**2)
         const angle = Math.atan2(this.y-this.lasty, this.x-this.lastx)
-
         for (let i=0; i<=dist; i++) {
             const x = this.lastx + Math.cos(angle)*i
             const y = this.lasty + Math.sin(angle)*i
-            this.drawcircle(x, y)
+            this.drawcircle(x, y, this.size)
         }
+    },
 
-        this.lastx = event.offsetX/editor.scale
-        this.lasty = event.offsetY/editor.scale
+    fill() {
+        const stack = []
+        stack.push([this.x, this.y])
 
+        while (stack.length > 0) {
+            const thing = stack.pop()
+            const x = thing[0]
+            const y = thing[1]
+            const get = editor.getPixel(x, y)
+            if (get != -1 && get != this.color) {
+                editor.setPixel(x, y, this.color)
+                stack.push([x+1, y])
+                stack.push([x-1, y])
+                stack.push([x, y+1])
+                stack.push([x, y-1])
+            }
+        }
+    },
+
+    draw() {
+        if (!this.down) return false
+        if (!this.lastx) this.lastx = this.x
+        if (!this.lasty) this.lasty = this.y
+
+        // do different things depending on mode
+        if (this.mode == "brush") this.drawline()
+        if (this.mode == "fill") this.fill()
+
+        this.lastx = this.x
+        this.lasty = this.y
         editor.refresh()
-
         return true
+    },
+
+    updatePosition() {
+        this.x = Math.round(event.offsetX/editor.scale)
+        this.y = Math.round(event.offsetY/editor.scale)
     },
 
     mousedown(event) {
         this.down = true
-        this.x = event.offsetX/editor.scale
-        this.y = event.offsetY/editor.scale
+        this.updatePosition()
         this.lastx = undefined
         this.lasty = undefined
         this.draw()
     },
 
     mousemove(event) {
-        this.x = event.offsetX/editor.scale
-        this.y = event.offsetY/editor.scale
+        this.updatePosition()
         if (!this.draw()) editor.refresh()
-    }
+    },
+
+    menuSelect(selection) {
+        // hackily refresh the menu by removing it and re-adding it
+        document.body.removeChild(document.getElementById("editorToolMenu"))
+        document.body.appendChild(fromTemplate("_editorToolMenu"))
+        calculateCanvasScale()
+
+        // highlight the selected tool
+        const menu = document.getElementById("editorToolMenu")
+        for (const thing of menu.children) {
+            if (thing.id == selection + "_editortool") {
+                thing.style.color = "#4488ff"
+                thing.style.borderColor = "#4488ff"
+                thing.style.borderStyle = "solid"
+            }
+        }
+
+        this.color = 1
+        this.mode = "brush"
+        if (selection == "eraser") this.color = 0
+        if (selection == "fill") {
+            this.mode = "fill"
+        }
+    },
 }
 
 const editor = {
@@ -142,26 +190,6 @@ const editor = {
     close() {
         toggleEditor()
         this.clear()
-    },
-
-    menuSelect(selection) {
-        // hackily refresh the menu by removing it and re-adding it
-        document.body.removeChild(document.getElementById("editorToolMenu"))
-        document.body.appendChild(fromTemplate("_editorToolMenu"))
-        calculateCanvasScale()
-
-        // highlight the selected tool
-        const menu = document.getElementById("editorToolMenu")
-        for (const thing of menu.children) {
-            if (thing.id == selection + "_editortool") {
-                thing.style.color = "#4488ff"
-                thing.style.borderColor = "#4488ff"
-                thing.style.borderStyle = "solid"
-            }
-        }
-
-        if (selection == "brush")  brush.color = 1
-        if (selection == "eraser") brush.color = 0
     },
 }
 
