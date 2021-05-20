@@ -7,12 +7,28 @@ const brush = {
     lastx: undefined,
     lasty: undefined,
     mode: "brush",
+    selection: "brush",
+
+    drawPixel(x, y) {
+        x = Math.floor(x)
+        y = Math.floor(y)
+
+        if (this.mode == "spraycan") {
+            const xx = x%2
+            const yy = y%2
+            if ((xx && !yy) || (!xx && yy)) {
+                return
+            }
+        }
+
+        editor.setPixel(x, y, this.color)
+    },
 
     drawcircle(x, y, radius) {
-        editor.setPixel(x, y, this.color)
+        this.drawPixel(x, y)
         for (let r=0; r<radius; r+=0.5) {
             for (let a=0; a<Math.PI*2; a+=Math.PI/8) {
-                editor.setPixel(x + Math.cos(a)*r, y + Math.sin(a)*r, this.color)
+                this.drawPixel(x + Math.cos(a)*r, y + Math.sin(a)*r)
             }
         }
     },
@@ -55,7 +71,7 @@ const brush = {
         if (!this.lasty) this.lasty = this.y
 
         // do different things depending on mode
-        if (this.mode == "brush") this.drawline()
+        if (this.mode == "brush" || this.mode == "spraycan") this.drawline()
         if (this.mode == "fill") this.fill()
 
         this.lastx = this.x
@@ -98,23 +114,42 @@ const brush = {
         document.body.appendChild(fromTemplate("_editorToolMenu"))
         calculateCanvasScale()
 
+        if (selection != "palette") {
+            this.selection = selection
+        } else {
+            // swap colors
+            this.color = (this.color + 1)%2
+        }
+
         // highlight the selected tool
         const menu = document.getElementById("editorToolMenu")
         for (const thing of menu.children) {
-            if (thing.id == selection + "_editortool") {
+            if (thing.id == this.selection + "_editortool") {
                 thing.style.color = "#4488ff"
                 thing.style.borderColor = "#4488ff"
                 thing.style.borderStyle = "solid"
             }
+
+            if (thing.id == "palette_editortool") {
+                thing.style.color = this.color ? "black" : "white"
+                thing.style.textShadow = "7px 7px " + (this.color ? "white" : "black")
+            }
         }
 
-        this.color = 1
-        this.mode = "brush"
-        this.size = 1
-        if (selection == "pencil") this.size = 0
-        if (selection == "eraser") this.color = 0
+        if (selection == "brush") {
+            this.mode = "brush"
+            this.size = 1
+        }
+        if (selection == "pencil") {
+            this.mode = "brush"
+            this.size = 0
+        }
         if (selection == "fill") {
             this.mode = "fill"
+        }
+        if (selection == "spraycan") {
+            this.mode = "spraycan"
+            this.size = 3
         }
     },
 }
@@ -209,7 +244,6 @@ const editor = {
 
     // create undo
     createBackup() {
-        console.log(zip(this.serialize()))
         this.backups[this.backupIndex] = JSON.stringify(this.data)
         this.backupIndex += 1
         this.backupMax = this.backupIndex
@@ -217,7 +251,6 @@ const editor = {
 
     undo() {
         if (this.backupIndex <= 0) return
-        console.log("undo")
         if (this.backupIndex == this.backupMax) this.backupIndex -= 1
         this.backupIndex -= 1
         this.data = JSON.parse(this.backups[this.backupIndex])
@@ -226,7 +259,6 @@ const editor = {
 
     redo() {
         if (this.backupIndex >= this.backupMax-1) return
-        console.log("redo")
         this.backupIndex += 1
         this.data = JSON.parse(this.backups[this.backupIndex])
         this.refresh()
