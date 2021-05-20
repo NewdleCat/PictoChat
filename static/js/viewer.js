@@ -5,6 +5,11 @@ function removeAllChildNodes() {
 	}
 }
 
+const toUserProfile = (name) => {
+	console.log(name)
+	let link = window.location.href
+    window.location.href = link.substring(0, link.length - 5) + "index/" + name
+}
 const drawFeed = () => {
 	if (document.getElementById("drawings").childElementCount > 0) {
 		removeAllChildNodes()
@@ -24,7 +29,7 @@ const drawFeed = () => {
 		title.innerHTML = `<strong> ${image.title} </strong>`
 
 		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
-		user.innerHTML = `<small> created by ${image.artist} at ${image.date} </small>`
+		user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
 
 		if (image.owner == "True")
 		{
@@ -63,5 +68,8 @@ const drawFeed = () => {
 		}
 	}
 }
+
+
 drawFeed()
 window.addEventListener("resize", drawFeed)
+
