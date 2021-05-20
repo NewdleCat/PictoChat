@@ -112,3 +112,9 @@ def delete_image(image_id = None):
     assert image_id is not None
     db(db.drawing.id == image_id).delete()
     redirect(URL('index'))
+
+@action('edit_profile', method=["POST", "GET"])
+@action.uses(db, session, auth.user)
+def edit_profile():
+    db(db.drawing.id == image_id).delete()
+    redirect(URL('index'))
