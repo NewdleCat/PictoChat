@@ -104,7 +104,10 @@ def add_friend(uuid = None):
 def post(image_data = None, image_title = None):
     assert image_data is not None
     assert image_title is not None
-    db.drawing.insert(title = image_title, image_data = image_data)
+    user = db(db.friend_code.user_email == get_user_email()).select()
+    user = user[0].user_name
+    print("YAAA: ",user)
+    db.drawing.insert(title = image_title, image_data = image_data, user_name = user)
     redirect(URL('index'))
     return dict()
 
@@ -124,8 +127,23 @@ def edit_username():
         redirect(URL('index'))
     form = Form(db.friend_code, record=user, deletable=False, csrf_session=session, formstyle=FormStyleBulma)
     if form.accepted:
+        updateDrawingUsernames()
         redirect(URL('index'))
     return dict(form = form)
+
+def updateDrawingUsernames():
+    
+    user = db(db.friend_code.user_email == get_user_email()).select()
+    
+    username = user[0].user_name
+    drawingsToUpdate = db(db.drawing.user_email == get_user_email()).select()
+
+    print("NUM of DRAWINGS: ", len(drawingsToUpdate))
+    for d in drawingsToUpdate:
+        print("---USERNAME: ",d.user_name)
+        db.drawing.update_or_insert((db.drawing.user_email==get_user_email()) & (db.drawing.date_added==d.date_added), user_name=username)
+
+    pass
 
 # @action('edit_profile', method=["POST", "GET"])
 # @action.uses(db, session, auth.user)
