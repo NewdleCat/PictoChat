@@ -118,28 +118,20 @@ def delete_image(image_id = None):
     redirect(URL('index'))
 
 @action('index/<username>', method=["POST", "GET"])
-@action.uses(db, session, auth.user, "profile.html")
-def delete_image(username = None):
+@action.uses(db, session, auth.user, "index.html")
+def to_profile(username = None):
     assert username is not None
-
+    print("GOING TO PROFILE")
     user = get_user_email()
-
     data = db(db.drawing.user_name == username).select().as_list()
-
     data = sorted(data, key=itemgetter('date_added'), reverse = True)
-
     owner = []
     for d in data:
         if d['user_email'] == user:
             owner.append(True)
         else:
             owner.append(False)
-
-    print(owner)
-
     return dict(data = data, owner = owner)
-
-
 
 @action('edit_username', method=["GET", "POST"])
 @action.uses(db, session, auth.user, "edit_username.html")
