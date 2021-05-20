@@ -74,6 +74,7 @@ const ctx = editorCanvas.getContext("2d")
 let mousedown = false
 let lastmx, lastmy
 
+// put things on the page
 const toggleEditor = () => {
     showEditor = !showEditor
 
@@ -88,19 +89,22 @@ const toggleEditor = () => {
         document.getElementById("editorDiv").appendChild(editorCanvas)
         document.body.appendChild(fromTemplate("_editorPostButton"))
         document.body.appendChild(fromTemplate("_editorCloseButton"))
+        document.body.appendChild(fromTemplate("_editorTitle"))
 
         remove(document.getElementById("editButton"))
         remove(document.getElementById("friendInput"))
 
         calculateCanvasScale()
     } else {
-        document.getElementById("editorDiv").removeChild(editorCanvas)
+        // remove the editor components
         remove(document.getElementById("editorPostButton"))
         remove(document.getElementById("editorCloseButton"))
+        remove(document.getElementById("editorTitle"))
+
+        // remove the editor components that are in the editorDiv
         let dim = document.getElementById("dim")
-        if (dim) {
-            document.getElementById("editorDiv").removeChild(dim)
-        }
+        if (dim) document.getElementById("editorDiv").removeChild(dim)
+        document.getElementById("editorDiv").removeChild(editorCanvas)
 
         document.body.appendChild(fromTemplate("_editButton"))
         document.body.appendChild(fromTemplate("_friendInput"))
@@ -131,6 +135,13 @@ const calculateCanvasScale = () => {
     if (close) {
         close.style.left = innerWidth/2 + width*scale/2 - close.clientWidth/2 + "px"
         close.style.top = innerHeight/2 - height*scale/2 - close.clientHeight/2 + "px"
+    }
+
+    let title = document.getElementById("editorTitle")
+    if (title) {
+        title.style.width = editorCanvas.clientWidth/2 + "px"
+        title.style.left = innerWidth/2 - title.clientWidth/2 + "px"
+        title.style.top = innerHeight/2 - height*scale/2 - title.clientHeight - 32 + "px"
     }
 
     // put the post button in the right spot
