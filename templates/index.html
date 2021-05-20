@@ -1,5 +1,8 @@
 [[extend 'layout.html']]
 
+<!-- font awesome 5 has more icons -->
+<script src="https://kit.fontawesome.com/fa6256f5b0.js" crossorigin="anonymous"></script>
+
 <script>
 	const images = []
 	[[for d in range(0,len(data)):]]
@@ -14,71 +17,7 @@
 	[[pass]]
 </script>
 
-<style type="text/css">
-	#drawings {
-		width: min(100vw, 750px);
-		padding-left: 0;
-	    padding-right: 0;
-	    margin-left: auto;
-	    margin-right: auto;
-	    display: block;
-	}
-
-	#editorCanvas {
-		position: fixed;
-	}
-
-	.feedCanvas {
-	    display: block;
-		border-color: black;
-		border: dashed;
-		margin-left: auto;
-		margin-right: auto;
-		padding: none;
-	}
-
-	input {
-		width: 100%;
-		background-color: #00000000;
-		color: white;
-		border: none;
-		font-size: 3em;
-		text-align: center;
-		text-shadow: 3px 3px black;
-	}
-
-	#dim {
-		position: fixed;
-		padding: 0;
-		margin: 0;
-		width: 100vw;
-		height: 100vh;
-		left: 0px;
-		top: 0px;
-		background-color: rgba(0,0,0, 0.75);
-	}
-
-	#editorPostButton {
-		position: fixed;
-		left: 120px;
-		top: 120px;
-	}
-
-	#editButton {
-		position: fixed;
-		height: 100px;
-		padding-left: 64px;
-		padding-right: 64px;
-	}
-
-	:root {
-		background-color: #ddd;
-	}
-
-	#inputs {
-		z-index: 10;
-	}
-</style>
+<link rel="stylesheet" type="text/css" href="css/index.css">
 
 <template id="_editorCloseButton">
 	<a class="button is-danger" onclick="toggleEditor(); clearData()" id="editorCloseButton" style="position: fixed">
@@ -109,7 +48,16 @@
 
 <template id="_editorTitle">
 	<div class="field" id="editorTitle" style="position: fixed;">
-		<input type="title" placeholder="My awesome picto">
+		<input type="title" placeholder="untitled">
+	</div>
+</template>
+
+<template id="_editorToolMenu">
+	<div id="editorToolMenu">
+		<button class="editorToolMenuButton"> <i class="fa fa-paint-brush" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton"> <i class="fa fa-eraser" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton"> <i class="fa fa-font" style="font-size: 3em;"></i> </button> <br>
+		<button class="editorToolMenuButton"> <i class="fa fa-fill-drip" style="font-size: 3em;"></i> </button> <br>
 	</div>
 </template>
 

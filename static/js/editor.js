@@ -90,6 +90,7 @@ const toggleEditor = () => {
         document.body.appendChild(fromTemplate("_editorPostButton"))
         document.body.appendChild(fromTemplate("_editorCloseButton"))
         document.body.appendChild(fromTemplate("_editorTitle"))
+        document.body.appendChild(fromTemplate("_editorToolMenu"))
 
         remove(document.getElementById("editButton"))
         remove(document.getElementById("friendInput"))
@@ -100,6 +101,7 @@ const toggleEditor = () => {
         remove(document.getElementById("editorPostButton"))
         remove(document.getElementById("editorCloseButton"))
         remove(document.getElementById("editorTitle"))
+        remove(document.getElementById("editorToolMenu"))
 
         // remove the editor components that are in the editorDiv
         let dim = document.getElementById("dim")
@@ -142,6 +144,14 @@ const calculateCanvasScale = () => {
         title.style.width = editorCanvas.clientWidth/2 + "px"
         title.style.left = innerWidth/2 - title.clientWidth/2 + "px"
         title.style.top = innerHeight/2 - height*scale/2 - title.clientHeight - 32 + "px"
+    }
+
+    let tools = document.getElementById("editorToolMenu")
+    if (tools) {
+        tools.style.top = innerHeight/2 - tools.clientHeight/2 + "px"
+        tools.style.height = editorCanvas.height
+        tools.style.left = innerWidth/2 - width*scale/2 - tools.clientWidth - 32 + "px"
+        //tools.style.width = "200px"
     }
 
     // put the post button in the right spot
