@@ -25,7 +25,7 @@
 </div>
 
 <div id="profileName" style="text-align: center; font-size: xx-large;">
-	
+
 </div>
 
 <template id="_editorCloseButton">
@@ -113,6 +113,11 @@
 		<input class="input" type="button" value="Add Friend" onclick="addFriend()">
 	</div>
 </template>
+
+<div style="width: 100%">
+	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
+	<div id="searchBarResults"></div>
+</div>
 
 <div class="section">
 	<div id="editorDiv">

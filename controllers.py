@@ -170,10 +170,10 @@ def edit_username():
         redirect(URL('index'))
     return dict(form = form)
 
-@action('search_url', method=["GET"])
-@action.uses(db, session, auth.user)
+@action("search_url", method="POST")
+@action.uses(url_signer.verify(), db)
 def search_url():
-    entry = request.params.get('entry')
+    entry = request.json.get('entry')
     assert entry is not None
     nameList = []
     posts = db(db.friend_code).select().as_list()

@@ -23,13 +23,19 @@ const addFriend = () => {
 const deleteImage = (id) => {
     axios.post(delete_post_url, {id: id}).then((response) => {
     	window.location.href = window.location.href
-    });
+    })
 }
 
 const getSearchNames = () => {
-	let temp = []
 	let entry = document.getElementById("searchBar").value
-	axios.get(search_bar_url, {params:{entry: entry}}).then((response) => {
-        temp = response.data.nameList
-    });
+
+	axios.post(search_bar_url, {entry: entry}).then((response) => {
+		let nameList = response.data.nameList
+		let res = document.getElementById("searchBarResults")
+		res.innerHTML = "<ul>"
+		for (const name of nameList) {
+			res.innerHTML += `<li>${name}</li>`
+		}
+		res.innerHTML += "</ul>"
+	})
 }
