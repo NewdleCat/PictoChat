@@ -208,7 +208,8 @@ const editor = {
             alert("You need to title your Picto!")
             return
         }
-        window.location.href = link.substring(0, link.length - 5) + "post/" + this.serialize() + "/" + title
+        //window.location.href = link.substring(0, link.length - 5) + "post/" + this.serialize() + "/" + title
+        axios.post(postUrl, {title: title, data: this.serialize()}).then(() => { window.location.href = window.location.href }) 
     },
 
     refresh() {
