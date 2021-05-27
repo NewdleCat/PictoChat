@@ -19,10 +19,6 @@
 
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
-<div style="width: 100%">
-	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
-</div>
-
 <template id="_editorCloseButton">
 	<a class="button is-danger" onclick="editor.close()" id="editorCloseButton" style="position: fixed">
 		<span class="icon">
@@ -108,6 +104,11 @@
 		<input class="input" type="button" value="Add Friend" onclick="addFriend()">
 	</div>
 </template>
+
+<div style="width: 100%">
+	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
+	<div id="searchBarResults"></div>
+</div>
 
 <div class="section">
 	<div id="editorDiv">
