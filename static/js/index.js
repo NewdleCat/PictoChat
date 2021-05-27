@@ -1,5 +1,6 @@
 const width = 128
 const height = 64
+let search_bar_url = "[[=XML(search_bar_url)]]";
 
 // automatically move over to /index if user is not explicitly on /index
 let link = window.location.href
@@ -23,4 +24,12 @@ const addFriend = () => {
 const deleteImage = (id) => {
 	let link = window.location.href
 	window.location.href = link.substring(0, link.length - 5) + "delete_image/" + id
+}
+
+const getSearchNames = () => {
+	let temp = []
+	axios.get(search_bar_url).then((response) => {
+        temp = response.data.nameList
+    });
+    console.log(temp)
 }

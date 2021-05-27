@@ -66,7 +66,12 @@ def index():
 
     print(owner)
 
-    return dict(data = data, owner = owner)
+    return dict(
+        data = data, 
+        owner = owner,
+        search_bar_url = URL('search_url', signer=url_signer),
+
+    )
 
 @action('editor')
 @action.uses(db, session, auth, "editor.html")
@@ -145,6 +150,13 @@ def edit_username():
         updateDrawingUsernames(user)
         redirect(URL('index'))
     return dict(form = form)
+
+@action('search_url', method=["GET"])
+@action.uses(db, session, auth.user)
+def search_url():
+    posts = db(db.friend_code).select().as_list()
+    nameList = posts.copy()
+    return dict(nameList = nameList)
 
 def updateDrawingUsernames(user):
     username = user.user_name
