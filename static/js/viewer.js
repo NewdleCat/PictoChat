@@ -1,7 +1,10 @@
 const toUserProfile = name => {
 	let link = window.location.href
-    window.location.href = link.substring(0, link.length - 5) + "index/" + name
-}
+	if (profile_name == "")
+    	window.location.href = link.substring(0, link.length - 5) + "index/" + name
+    else
+    	window.location.href = window.location.href
+}	
 
 const drawFeed = () => {
 	if (document.getElementById("drawings").childElementCount > 0) {
@@ -10,6 +13,10 @@ const drawFeed = () => {
 			parent.removeChild(parent.lastChild);
 		}
 	}
+
+	const profileName = document.getElementById("profileName")
+	if (profile_name != "")
+		profileName.innerHTML = profile_name + "'s profile page"
 
     for (const image of images) {
 		const feedEntry = fromTemplate("_feedEntry")
@@ -28,8 +35,14 @@ const drawFeed = () => {
 		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
 		user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
 
-		if (image.owner == "True")
-		{
+		const heart = feedEntry.getElementsByClassName("heart")[0]
+		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { image.likes = response.data.likes; drawFeed(); }) }
+		
+		if (image.likes > 0)
+			heart.innerHTML = image.likes
+		console.log(image.likes)
+
+		if (image.owner == "True") {
 			const trash = feedEntry.getElementsByClassName("feedTrash")[0]
 			trash.innerHTML = `<a class="level-item" aria-label="like"><span class="icon is-small"><i class="fa fa-trash" aria-hidden="true" onclick="deleteImage(${image.id})"></i></span> </a>`
 		}

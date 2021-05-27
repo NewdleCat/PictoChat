@@ -58,20 +58,26 @@ def index():
     data = sorted(data, key=itemgetter('date_added'), reverse = True)
 
     owner = []
+    likes = []
     for d in data:
         if d['user_email'] == user:
             owner.append(True)
         else:
             owner.append(False)
+        likes.append(len(d['liked_by']))
 
     print(owner)
+    print(likes)
 
     return dict(
         data = data,
         owner = owner,
+        likes = likes,
         search_bar_url = URL('search_url', signer=url_signer),
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
+        like_post_url = URL('like_post', signer=url_signer),
+        profile_name = "",
     )
 
 @action('editor')
@@ -129,17 +135,27 @@ def delete_image():
 @action.uses(db, session, auth.user, "index.html")
 def to_profile(username = None):
     assert username is not None
-    print("GOING TO PROFILE")
     user = get_user_email()
     data = db(db.drawing.user_name == username).select().as_list()
     data = sorted(data, key=itemgetter('date_added'), reverse = True)
     owner = []
+    likes = []
     for d in data:
         if d['user_email'] == user:
             owner.append(True)
         else:
             owner.append(False)
-    return dict(data = data, owner = owner)
+        likes.append(len(d['liked_by']))
+    return dict(
+        data = data,
+        owner = owner,
+        likes = likes,
+        search_bar_url = URL('search_url', signer=url_signer),
+        delete_post_url = URL('delete_image', signer=url_signer),
+        post_url = URL('post', signer=url_signer),
+        like_post_url = URL('like_post', signer=url_signer),
+        profile_name = username,
+    )
 
 @action('edit_username', method=["GET", "POST"])
 @action.uses(db, session, auth.user, "edit_username.html")
@@ -166,6 +182,26 @@ def search_url():
         if name != None and (entry.lower() in name.lower()):
             nameList.append(name)
     return dict(nameList = nameList)
+
+@action('like_post', method=["POST"])
+@action.uses(db, session, auth.user)
+def like_post():
+    id = request.json.get('id')
+    assert id is not None
+    user = get_user_email()
+    post = db(db.drawing.id == id).select().as_list()
+    temp = post[0]["liked_by"].copy()
+    if user in temp:
+        temp.remove(user)
+    else:
+        temp.append(user)
+    db.drawing.update_or_insert(db.drawing.id == id , liked_by=temp)
+    print(temp)
+
+    return dict(likes = len(temp))
+
+
+     
 
 def updateDrawingUsernames(user):
     username = user.user_name

@@ -13,6 +13,7 @@
 			artist: "[[ = data[d]["user_name"] ]]",
 			date: "[[ = data[d]["date_added"] ]]",
 			owner: "[[ = owner[d] ]]",
+			likes: "[[ = likes[d] ]]",
 		}
 	[[pass]]
 </script>
@@ -21,6 +22,10 @@
 
 <div style="width: 100%">
 	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
+</div>
+
+<div id="profileName" style="text-align: center; font-size: xx-large;">
+	
 </div>
 
 <template id="_editorCloseButton">
@@ -91,7 +96,7 @@
 						</a>
 						<a class="level-item" aria-label="like">
 							<span class="icon is-small">
-								<i class="fa fa-heart-o" aria-hidden="true"></i>
+								<i class="fa fa-heart-o heart" aria-hidden="true"></i>
 							</span>
 						</a>
 						<div class="feedTrash"></div>
@@ -121,6 +126,8 @@
 	const postUrl = "[[=XML(post_url)]]"
 	const search_bar_url = "[[=XML(search_bar_url)]]";
 	const delete_post_url = "[[=XML(delete_post_url)]]";
+	const like_post_url = "[[=XML(like_post_url)]]";
+	const profile_name = "[[=profile_name]]"
 </script>
 <script src="js/index.js"></script>
 <script src="js/viewer.js"></script>
