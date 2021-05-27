@@ -70,10 +70,7 @@ def index():
         data = data, 
         owner = owner,
         search_bar_url = URL('search_url', signer=url_signer),
-<<<<<<< HEAD
         post_url = URL('post', signer=url_signer),
-=======
->>>>>>> 782f2e88c731c065534905dab104883d2e38bafa
     )
 
 @action('editor')
