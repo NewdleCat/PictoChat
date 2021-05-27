@@ -70,6 +70,7 @@ def index():
         data = data, 
         owner = owner,
         search_bar_url = URL('search_url', signer=url_signer),
+        delete_post_url = URL('delete_image', signer=url_signer),
     )
 
 @action('editor')
@@ -114,9 +115,10 @@ def post(image_data = None, image_title = None):
     redirect(URL('index'))
     return dict()
 
-@action('delete_image/<image_id>', method=["POST", "GET"])
+@action('delete_image', method=["POST", "GET"])
 @action.uses(db, session, auth.user)
-def delete_image(image_id = None):
+def delete_image():
+    image_id = request.json.get('id')
     assert image_id is not None
     db(db.drawing.id == image_id).delete()
     redirect(URL('index'))

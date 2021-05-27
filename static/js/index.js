@@ -21,8 +21,9 @@ const addFriend = () => {
 }
 
 const deleteImage = (id) => {
-	let link = window.location.href
-	window.location.href = link.substring(0, link.length - 5) + "delete_image/" + id
+    axios.post(delete_post_url, {id: id}).then((response) => {
+    	window.location.href = window.location.href
+    });
 }
 
 const getSearchNames = () => {

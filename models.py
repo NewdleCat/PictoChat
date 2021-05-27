@@ -26,6 +26,7 @@ db.define_table(
     Field('date_added', type="datetime", default=get_time),
     Field('user_email', default=get_user_email),
     Field('user_name'),
+    Field('liked_by', type='list:string', default=[]),
 )
 # db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 
