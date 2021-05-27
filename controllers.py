@@ -70,7 +70,6 @@ def index():
         data = data, 
         owner = owner,
         search_bar_url = URL('search_url', signer=url_signer),
-
     )
 
 @action('editor')
@@ -154,8 +153,14 @@ def edit_username():
 @action('search_url', method=["GET"])
 @action.uses(db, session, auth.user)
 def search_url():
+    entry = request.params.get('entry')
+    assert entry is not None
+    nameList = []
     posts = db(db.friend_code).select().as_list()
-    nameList = posts.copy()
+    for n in posts:
+        name = n["user_name"]
+        if name != None and (entry.lower() in name.lower()):
+            nameList.append(name)
     return dict(nameList = nameList)
 
 def updateDrawingUsernames(user):

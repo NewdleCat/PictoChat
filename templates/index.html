@@ -20,7 +20,7 @@
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
 <div style="width: 100%">
-	<input type="text" class="input" oninput="getSearchNames()">
+	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
 </div>
 
 <template id="_editorCloseButton">
@@ -117,6 +117,9 @@
 	<div id="drawings"></div>
 </div>
 
+<script>
+	const search_bar_url = "[[=XML(search_bar_url)]]";
+</script>
 <script src="js/index.js"></script>
 <script src="js/viewer.js"></script>
 <script src="js/editor.js"></script>
