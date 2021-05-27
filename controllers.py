@@ -31,7 +31,7 @@ from .common import db, session, T, cache, auth, logger, authenticated, unauthen
 from py4web.utils.url_signer import URLSigner
 from .models import get_user_email
 import uuid
-from operator import itemgetter 
+from operator import itemgetter
 from py4web.utils.form import Form, FormStyleBulma
 
 url_signer = URLSigner(session)
@@ -67,10 +67,11 @@ def index():
     print(owner)
 
     return dict(
-        data = data, 
+        data = data,
         owner = owner,
         search_bar_url = URL('search_url', signer=url_signer),
         delete_post_url = URL('delete_image', signer=url_signer),
+        post_url = URL('post', signer=url_signer),
     )
 
 @action('editor')
@@ -88,7 +89,7 @@ def add_friend(friend_email = None):
     user = get_user_email()
     friend = db(db.friend_code.user_email == friend_email).select()
     you = db(db.friend_code.user_email == user).select()
-    
+
     if len(friend) == 0:
         redirect(URL('index'))
 
@@ -103,17 +104,18 @@ def add_friend(friend_email = None):
     redirect(URL('index'))
     return dict()
 
-@action('post/<image_data>/<image_title>',method=["POST", "GET"])
-@action.uses(db, session, auth)
-def post(image_data = None, image_title = None):
-    assert image_data is not None
-    assert image_title is not None
+#@action('post/<image_data>/<image_title>',method=["POST", "GET"])
+#@action.uses(db, session, auth)
+@action("post", method="POST")
+@action.uses(url_signer.verify(), db)
+def post():
+    data = request.json.get("data")
+    title = request.json.get("title")
     user = db(db.friend_code.user_email == get_user_email()).select()
     user = user[0].user_name
     print("YAAA: ",user)
-    db.drawing.insert(title = image_title, image_data = image_data, user_name = user)
-    redirect(URL('index'))
-    return dict()
+    db.drawing.insert(title = title, image_data = data, user_name = user)
+    #return dict()
 
 @action('delete_image', method=["POST", "GET"])
 @action.uses(db, session, auth.user)
