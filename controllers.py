@@ -39,8 +39,10 @@ url_signer = URLSigner(session)
 @action('index')
 @action.uses(db, auth, 'index.html')
 def index():
+    # user = db(db.friend_code.user_email == get_user_email()).select().as_list()
+    # username = user[0]["user_name"]
     user = get_user_email()
-    print("User:", user)
+    # print("User:", user)
 
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
@@ -146,6 +148,7 @@ def to_profile(username = None):
         else:
             owner.append(False)
         likes.append(len(d['liked_by']))
+    
     return dict(
         data = data,
         owner = owner,
@@ -154,6 +157,7 @@ def to_profile(username = None):
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
         like_post_url = URL('like_post', signer=url_signer),
+        main_url = URL('index'),
         add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = username,
     )
