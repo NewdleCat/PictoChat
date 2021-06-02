@@ -35,7 +35,7 @@ db.define_table(
     Field('user_name', requires=IS_NOT_EMPTY()),
 	Field('uuid', requires=IS_NOT_EMPTY()),
     Field('user_email', default=get_user_email),
-    Field('following', type='list:string'),
+    Field('following', type='list:string', default=[]),
 )
 db.friend_code.id.readable = db.friend_code.id.writable = False 
 db.friend_code.user_email.readable = db.friend_code.user_email.writable = False 

@@ -16,7 +16,7 @@ const drawFeed = () => {
 
 	const profileName = document.getElementById("profileName")
 	if (profile_name != "")
-		profileName.innerHTML = profile_name + "'s profile page"
+		profileName.innerHTML = profile_name + "'s profile page" + '<input type="button" class="button" value="follow" style="width: 30%" onclick="addFriend()">'
 
     for (const image of images) {
 		const feedEntry = fromTemplate("_feedEntry")

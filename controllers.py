@@ -77,6 +77,7 @@ def index():
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
         like_post_url = URL('like_post', signer=url_signer),
+        add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = "",
     )
 
@@ -85,31 +86,29 @@ def index():
 def editor():
     return dict()
 
-@action('add_friend/<friend_email>')
+@action('add_friend', method=["POST"])
 @action.uses(db, session, auth)
-def add_friend(friend_email = None):
-    assert friend_email is not None
-    if friend_email == "":
-        redirect(URL('index'))
+def add_friend():
+    friendName = request.json.get("username")
+    assert friendName is not None
 
     user = get_user_email()
-    friend = db(db.friend_code.user_email == friend_email).select()
+    friend = db(db.friend_code.user_name == friendName).select()
     you = db(db.friend_code.user_email == user).select()
 
-    if len(friend) == 0:
-        redirect(URL('index'))
+    friendEmail = friend[0]['user_email']
 
     followingList = you[0]['following']
     if followingList == None:
         followingList = []
-    if friend_email not in followingList:
-        followingList.append(friend_email)
-    if friend_email != user:
+    if friendEmail not in followingList:
+        followingList.append(friendEmail)
+    elif friendEmail in followingList:
+        followingList.remove(friendEmail)
+    if friendEmail != user:
         db.friend_code.update_or_insert(db.friend_code.user_email == user, following = followingList)
 
-    redirect(URL('index'))
-    return dict()
-
+    return "YES"
 #@action('post/<image_data>/<image_title>',method=["POST", "GET"])
 #@action.uses(db, session, auth)
 @action("post", method="POST")
@@ -154,6 +153,7 @@ def to_profile(username = None):
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
         like_post_url = URL('like_post', signer=url_signer),
+        add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = username,
     )
 
