@@ -27,15 +27,16 @@ const deleteImage = (id) => {
 }
 
 const getSearchNames = () => {
-	let entry = document.getElementById("searchBar").value
+	const value = document.getElementById("searchBar").value
 
-	axios.post(search_bar_url, {entry: entry}).then((response) => {
+	axios.post(search_bar_url, {entry: value}).then(response => {
 		let nameList = response.data.nameList
 		let res = document.getElementById("searchBarResults")
-		res.innerHTML = "<ul>"
-		for (const name of nameList) {
-			res.innerHTML += `<li>${name}</li>`
+		res.innerHTML = ""
+		if (value != "") {
+			for (const name of nameList) {
+				res.innerHTML += `<tr><td><a href="${mainUrl}/${name}">${name}</a></td></tr>`
+			}
 		}
-		res.innerHTML += "</ul>"
 	})
 }

@@ -20,10 +20,6 @@
 
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
-<div style="width: 100%">
-	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
-</div>
-
 <div id="profileName" style="text-align: center; font-size: xx-large;">
 
 </div>
@@ -114,17 +110,16 @@
 	</div>
 </template>
 
-<div style="width: 100%">
-	<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
-	<div id="searchBarResults"></div>
-</div>
-
 <div class="section">
 	<div id="editorDiv">
 		<canvas id="editorCanvas"></canvas>
 	</div>
 
-	<div id="drawings"></div>
+	<div id="centered">
+		<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
+		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
+		<div id="drawings"> </div>
+	</div>
 </div>
 
 <script>
@@ -133,6 +128,7 @@
 	const delete_post_url = "[[=XML(delete_post_url)]]";
 	const like_post_url = "[[=XML(like_post_url)]]";
 	const profile_name = "[[=profile_name]]"
+	const mainUrl = "[[=XML(main_url)]]"
 </script>
 <script src="js/index.js"></script>
 <script src="js/viewer.js"></script>

@@ -77,6 +77,7 @@ def index():
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
         like_post_url = URL('like_post', signer=url_signer),
+        main_url = URL('index'),
         profile_name = "",
     )
 
