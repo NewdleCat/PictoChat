@@ -12,12 +12,8 @@ const fromTemplate = (template) => {
 }
 
 const addFriend = () => {
-	let link = window.location.href
-	let code = document.getElementById("codeInput").value
-	if (code == "") {
-		return
-	}
-	window.location.href = link.substring(0, link.length - 5) + "add_friend/" + code
+	console.log(profile_name)
+	axios.post(add_friend_url, {username: profile_name})
 }
 
 const deleteImage = (id) => {
