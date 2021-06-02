@@ -1,7 +1,7 @@
 const toUserProfile = name => {
 	let link = window.location.href
 	if (profile_name == "")
-    	window.location.href = link.substring(0, link.length - 5) + "index/" + name
+    	window.location.href = `${mainUrl}/${name}`
     else
     	window.location.href = window.location.href
 }	
