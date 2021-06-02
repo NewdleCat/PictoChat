@@ -21,10 +21,6 @@
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
 
-<div id="profileName" style="text-align: center; font-size: xx-large;">
-
-</div>
-
 <template id="_editorCloseButton">
 	<a class="button is-danger" onclick="editor.close()" id="editorCloseButton" style="position: fixed">
 		<span class="icon">
@@ -117,8 +113,9 @@
 	</div>
 
 	<div id="centered">
-		<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
+		<input id="searchBar" type="text" class="input" oninput="getSearchNames()" onfocusin="getSearchNames()" onfocusout="closeSearchNames()">
 		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
+		<div id="profileName" style="text-align: center; font-size: xx-large;"> </div>
 		<div id="drawings"> </div>
 	</div>
 </div>

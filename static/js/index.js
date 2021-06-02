@@ -36,3 +36,8 @@ const getSearchNames = () => {
 		}
 	})
 }
+
+const closeSearchNames = () => {
+	console.log("test")
+	setTimeout(() => {document.getElementById("searchBarResults").innerHTML = "<tr></tr>"}, 100)
+}
