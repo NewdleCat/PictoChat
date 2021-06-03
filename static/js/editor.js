@@ -315,7 +315,6 @@ const toggleEditor = () => {
         if (dim) document.getElementById("editorDiv").removeChild(dim)
         document.getElementById("editorDiv").removeChild(editor.canvas)
 
-        console.log(`logged in: ${loggedIn}`)
         if (loggedIn) document.body.appendChild(fromTemplate("_editButton"))
         //document.body.appendChild(fromTemplate("_friendInput"))
 
