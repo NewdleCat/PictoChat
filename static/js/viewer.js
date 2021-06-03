@@ -16,7 +16,12 @@ const drawFeed = () => {
 
 	const profileName = document.getElementById("profileName")
 	if (profile_name != "")
-		profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+	{
+		if (userFollowing.includes(profile_email))
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Unfollow</a></div>'
+		else
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+	}
 
     for (const image of images) {
 		let x = 0
@@ -48,7 +53,18 @@ const drawFeed = () => {
 			heart.innerHTML = image.likes
 			if (image.likes <= 0) 
 				heart.innerHTML = ""
+			if (response.data.likeStatus == "like") 
+            	feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart heart"
+        	else
+            	feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart-o heart"
 		}) }
+
+		if (image.likedBy.includes(userEmail)) {
+            feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart heart"
+        }
+		
+		if (image.likes > 0)
+			heart.innerHTML = image.likes
 
 		const remix = feedEntry.getElementsByClassName("remix")[0]
 		remix.onclick = () => {
@@ -59,8 +75,6 @@ const drawFeed = () => {
 			document.getElementById("editorTitleVal").value = image.title
 		}
 		
-		if (image.likes > 0)
-			heart.innerHTML = image.likes
 		// console.log(image.likes)
 
 		if (image.owner == "True") {

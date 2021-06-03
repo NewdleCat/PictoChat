@@ -13,8 +13,15 @@ const fromTemplate = (template) => {
 
 const addFriend = () => {
 	console.log(profile_name)
-	axios.post(add_friend_url, {username: profile_name})
+	axios.post(add_friend_url, {username: profile_name}).then((response) => {
+		if (response.data.followStatus == "followed")
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Unfollow</a></div>'
+		else
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+	})
 }
+
+
 
 const deleteImage = (id) => {
     axios.post(delete_post_url, {id: id}).then((response) => {
