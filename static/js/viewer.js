@@ -43,7 +43,12 @@ const drawFeed = () => {
 			user.innerHTML = `<small> remixed by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> from <a onclick='toUserProfile("${image.remixedFrom}")'> ${image.remixedFrom} </a> at ${image.date} </small>`
 
 		const heart = feedEntry.getElementsByClassName("heart")[0]
-		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { image.likes = response.data.likes; drawFeed(); }) }
+		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { 
+			image.likes = response.data.likes;
+			heart.innerHTML = image.likes
+			if (image.likes <= 0) 
+				heart.innerHTML = ""
+		}) }
 
 		const remix = feedEntry.getElementsByClassName("remix")[0]
 		remix.onclick = () => {
@@ -56,7 +61,7 @@ const drawFeed = () => {
 		
 		if (image.likes > 0)
 			heart.innerHTML = image.likes
-		console.log(image.likes)
+		// console.log(image.likes)
 
 		if (image.owner == "True") {
 			const trash = feedEntry.getElementsByClassName("feedTrash")[0]
