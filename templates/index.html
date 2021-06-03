@@ -21,10 +21,6 @@
 <link rel="stylesheet" type="text/css" href="css/index.css">
 
 
-<div id="profileName" style="text-align: center; font-size: xx-large;">
-
-</div>
-
 <template id="_editorCloseButton">
 	<a class="button is-danger" onclick="editor.close()" id="editorCloseButton" style="position: fixed">
 		<span class="icon">
@@ -88,7 +84,7 @@
 					<div class="level-left">
 						<a class="level-item" aria-label="retweet">
 							<span class="icon is-small">
-								<i class="fa fa-retweet" aria-hidden="true"></i>
+								<i class="fa fa-retweet remix" aria-hidden="true"></i>
 							</span>
 						</a>
 						<a class="level-item" aria-label="like">
@@ -112,14 +108,16 @@
 </template>
 
 <div class="section">
-	<div id="editorDiv">
-		<canvas id="editorCanvas"></canvas>
+	<div id="centered">
+		<input id="searchBar" type="text" class="input" oninput="getSearchNames()" onfocusin="getSearchNames()" onfocusout="closeSearchNames()" placeholder="Search the Pictoverse">
+		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
+		<div style="padding: 1.5em"></div>
+		<div id="profileName" style="font-size: xx-large;"> </div>
+		<div id="drawings"> </div>
 	</div>
 
-	<div id="centered">
-		<input id="searchBar" type="text" class="input" oninput="getSearchNames()">
-		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
-		<div id="drawings"> </div>
+	<div id="editorDiv">
+		<canvas id="editorCanvas"></canvas>
 	</div>
 </div>
 
@@ -131,6 +129,7 @@
 	const profile_name = "[[=profile_name]]"
 	const mainUrl = "[[=XML(main_url)]]"
 	const add_friend_url = "[[=XML(add_friend_url)]]"
+	const loggedIn = "[[=logged_in]]"
 </script>
 <script src="js/index.js"></script>
 <script src="js/viewer.js"></script>

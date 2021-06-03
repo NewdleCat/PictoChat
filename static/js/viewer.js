@@ -1,7 +1,7 @@
 const toUserProfile = name => {
 	let link = window.location.href
 	if (profile_name == "")
-    	window.location.href = link.substring(0, link.length - 5) + "index/" + name
+    	window.location.href = `${mainUrl}/${name}`
     else
     	window.location.href = window.location.href
 }	
@@ -16,9 +16,13 @@ const drawFeed = () => {
 
 	const profileName = document.getElementById("profileName")
 	if (profile_name != "")
-		profileName.innerHTML = profile_name + "'s profile page" + '<input type="button" class="button" value="follow" style="width: 30%" onclick="addFriend()">'
+		profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
 
     for (const image of images) {
+		let x = 0
+		let y = 0
+		let editorData = []
+
 		const feedEntry = fromTemplate("_feedEntry")
 		document.getElementById("drawings").appendChild(feedEntry)
 
@@ -37,6 +41,14 @@ const drawFeed = () => {
 
 		const heart = feedEntry.getElementsByClassName("heart")[0]
 		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { image.likes = response.data.likes; drawFeed(); }) }
+
+		const remix = feedEntry.getElementsByClassName("remix")[0]
+		remix.onclick = () => {
+			toggleEditor()
+			editor.data = editorData
+			editor.refresh()
+			document.getElementById("editorTitleVal").value = image.title
+		}
 		
 		if (image.likes > 0)
 			heart.innerHTML = image.likes
@@ -47,33 +59,43 @@ const drawFeed = () => {
 			trash.innerHTML = `<a class="level-item" aria-label="like"><span class="icon is-small"><i class="fa fa-trash" aria-hidden="true" onclick="deleteImage(${image.id})"></i></span> </a>`
 		}
 
+		for (let i=0; i<128; i++) {
+			editorData[i] = []
+		}
+
 		const get = (x,y,scale) => {
 			return [Math.floor(x*scale), Math.floor(y*scale), Math.ceil(scale), Math.ceil(scale)]
 		}
 
-		let x = 0
-		let y = 0
+		const set = (x,y) => {
+			editorData[x][y] = true
+		}
+
 		for (let i=0; i<image.data.length; i++) {
 			let n = parseInt(image.data[i], 16)
 
 			if (n >= 8) {
 				n -= 8
 				let [sx, sy, sw, sh] = get(x+3, y, scale)
+				set(x+3, y)
 				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 4) {
 				n -= 4
 				let [sx, sy, sw, sh] = get(x+2, y, scale)
+				set(x+2, y)
 				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 2) {
 				n -= 2
 				let [sx, sy, sw, sh] = get(x+1, y, scale)
+				set(x+1, y)
 				ctx.fillRect(sx,sy,sw,sh)
 			}
 			if (n >= 1) {
 				n -= 1
 				let [sx, sy, sw, sh] = get(x, y, scale)
+				set(x, y)
 				ctx.fillRect(sx,sy,sw,sh)
 			}
 
