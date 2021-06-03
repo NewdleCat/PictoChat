@@ -27,6 +27,7 @@ db.define_table(
     Field('user_email', default=get_user_email),
     Field('user_name'),
     Field('liked_by', type='list:string', default=[]),
+    Field('remixed_from', default=""),
 )
 # db.drawing.user_email.readable = db.drawing.user_email.writable = False 
 

@@ -39,10 +39,14 @@ url_signer = URLSigner(session)
 @action('index')
 @action.uses(db, auth, 'index.html')
 def index():
-    # user = db(db.friend_code.user_email == get_user_email()).select().as_list()
-    # username = user[0]["user_name"]
+    # userTemp = db(db.friend_code.user_email == get_user_email()).select().as_list()
+    # username = userTemp[0]["user_name"]
     user = get_user_email()
-    # print("User:", user)
+
+    # globals().get('user')["username"] = username
+    # print(globals().get('user').get('email'))
+    # print("User: ", globals().get('user').get("username"))
+
 
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
