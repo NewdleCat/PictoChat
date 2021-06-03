@@ -324,9 +324,14 @@ const toggleEditor = () => {
             addFriendInput.style.top = "-64 px"
         }
 
+        let centered = document.getElementById("centered")
         let edit = document.getElementById("editButton")
         edit.style.top = "64px"
-        edit.style.left = "64px"
+        let marginSize = (innerWidth - centered.clientWidth)/2
+        if (marginSize < edit.clientWidth) {
+            edit.style.width = marginSize + "px"
+        }
+        edit.style.left = (marginSize - edit.clientWidth)/2 + "px"
     }
 }
 
