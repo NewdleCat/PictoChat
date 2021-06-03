@@ -124,10 +124,14 @@ def add_friend():
 def post():
     data = request.json.get("data")
     title = request.json.get("title")
+    remixFrom = request.json.get("remix")
+    print("THINGS: ", remixFrom)
+    # assert data is not None
+    # assert title is not None
+    # assert remixFrom is not None
     user = db(db.friend_code.user_email == get_user_email()).select()
     user = user[0].user_name
-    print("YAAA: ",user)
-    db.drawing.insert(title = title, image_data = data, user_name = user)
+    db.drawing.insert(title = title, image_data = data, user_name = user, remixed_from = remixFrom)
     #return dict()
 
 @action('delete_image', method=["POST", "GET"])

@@ -163,12 +163,14 @@ const editor = {
     backupIndex: 0,
     backupMax: 0,
     show: true,
+    remixFrom: "",
 
     clear() {
         this.backups = []
         this.backupIndex = 0
         this.backupMax = 0
         this.data = []
+        this.remixFrom = ""
         for (let x=0; x<width; x++)
             this.data[x] = []
     },
@@ -209,7 +211,7 @@ const editor = {
             return
         }
         //window.location.href = link.substring(0, link.length - 5) + "post/" + this.serialize() + "/" + title
-        axios.post(postUrl, {title: title, data: this.serialize()}).then(() => { window.location.href = window.location.href }) 
+        axios.post(postUrl, {title: title, data: this.serialize(), remix: this.remixFrom}).then(() => { window.location.href = window.location.href }) 
     },
 
     refresh() {

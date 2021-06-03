@@ -37,7 +37,10 @@ const drawFeed = () => {
 		title.innerHTML = `<strong> ${image.title} </strong>`
 
 		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
-		user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
+		if (image.remixedFrom == "")
+			user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
+		else
+			user.innerHTML = `<small> remixed by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> from <a onclick='toUserProfile("${image.remixedFrom}")'> ${image.remixedFrom} </a> at ${image.date} </small>`
 
 		const heart = feedEntry.getElementsByClassName("heart")[0]
 		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { image.likes = response.data.likes; drawFeed(); }) }
@@ -46,6 +49,7 @@ const drawFeed = () => {
 		remix.onclick = () => {
 			toggleEditor()
 			editor.data = editorData
+			editor.remixFrom = image.artist
 			editor.refresh()
 			document.getElementById("editorTitleVal").value = image.title
 		}
