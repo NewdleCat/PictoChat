@@ -16,7 +16,12 @@ const drawFeed = () => {
 
 	const profileName = document.getElementById("profileName")
 	if (profile_name != "")
-		profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+	{
+		if (userFollowing.includes(profile_email))
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Unfollow</a></div>'
+		else
+			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+	}
 
     for (const image of images) {
 		let x = 0
@@ -37,22 +42,40 @@ const drawFeed = () => {
 		title.innerHTML = `<strong> ${image.title} </strong>`
 
 		const user = feedEntry.getElementsByClassName("feedEntryUser")[0]
-		user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
+		if (image.remixedFrom == "")
+			user.innerHTML = `<small> created by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> at ${image.date} </small>`
+		else
+			user.innerHTML = `<small> remixed by <a onclick='toUserProfile("${image.artist}")'> ${image.artist} </a> from <a onclick='toUserProfile("${image.remixedFrom}")'> ${image.remixedFrom} </a> at ${image.date} </small>`
 
 		const heart = feedEntry.getElementsByClassName("heart")[0]
-		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { image.likes = response.data.likes; drawFeed(); }) }
+		heart.onclick = () => { axios.post(like_post_url, {id: image.id}).then((response) => { 
+			image.likes = response.data.likes;
+			heart.innerHTML = image.likes
+			if (image.likes <= 0) 
+				heart.innerHTML = ""
+			if (response.data.likeStatus == "like") 
+            	feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart heart"
+        	else
+            	feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart-o heart"
+		}) }
+
+		if (image.likedBy.includes(userEmail)) {
+            feedEntry.getElementsByClassName("heart")[0].className = "fa fa-heart heart"
+        }
+		
+		if (image.likes > 0)
+			heart.innerHTML = image.likes
 
 		const remix = feedEntry.getElementsByClassName("remix")[0]
 		remix.onclick = () => {
 			toggleEditor()
 			editor.data = editorData
+			editor.remixFrom = image.artist
 			editor.refresh()
 			document.getElementById("editorTitleVal").value = image.title
 		}
 		
-		if (image.likes > 0)
-			heart.innerHTML = image.likes
-		console.log(image.likes)
+		// console.log(image.likes)
 
 		if (image.owner == "True") {
 			const trash = feedEntry.getElementsByClassName("feedTrash")[0]

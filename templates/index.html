@@ -12,8 +12,10 @@
 			title: "[[ = data[d]["title"] ]]",
 			artist: "[[ = data[d]["user_name"] ]]",
 			date: "[[ = data[d]["date_added"] ]]",
+			likedBy: "[[ = data[d]["liked_by"] ]]",
 			owner: "[[ = owner[d] ]]",
 			likes: "[[ = likes[d] ]]",
+			remixedFrom: "[[ = data[d]["remixed_from"] ]]",
 		}
 	[[pass]]
 </script>
@@ -127,9 +129,12 @@
 	const delete_post_url = "[[=XML(delete_post_url)]]"
 	const like_post_url = "[[=XML(like_post_url)]]"
 	const profile_name = "[[=profile_name]]"
+	const profile_email = "[[=profile_email]]"
 	const mainUrl = "[[=XML(main_url)]]"
 	const add_friend_url = "[[=XML(add_friend_url)]]"
 	const loggedIn = "[[=logged_in]]"
+	const userEmail = "[[=userEmail]]"
+	const userFollowing = "[[=userFollowing]]"
 </script>
 <script src="js/index.js"></script>
 <script src="js/viewer.js"></script>

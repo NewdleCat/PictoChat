@@ -39,11 +39,7 @@ url_signer = URLSigner(session)
 @action('index')
 @action.uses(db, auth, 'index.html')
 def index():
-    # user = db(db.friend_code.user_email == get_user_email()).select().as_list()
-    # username = user[0]["user_name"]
     user = get_user_email()
-    # print("User:", user)
-
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
         db.friend_code.insert(uuid=uuid.uuid4(), user_name=user)
@@ -75,6 +71,8 @@ def index():
         data = data,
         owner = owner,
         likes = likes,
+        userEmail = user,
+        userFollowing = following,
         search_bar_url = URL('search_url', signer=url_signer),
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
@@ -82,6 +80,7 @@ def index():
         main_url = URL('index'),
         add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = "",
+        profile_email = "",
         logged_in = "" if get_user_email() == None else get_user_email(),
     )
 
@@ -102,17 +101,21 @@ def add_friend():
 
     friendEmail = friend[0]['user_email']
 
+    followStatus = ""
+
     followingList = you[0]['following']
     if followingList == None:
         followingList = []
     if friendEmail not in followingList:
         followingList.append(friendEmail)
+        followStatus = "followed"
     elif friendEmail in followingList:
         followingList.remove(friendEmail)
+        followStatus = "unfollowed"
     if friendEmail != user:
         db.friend_code.update_or_insert(db.friend_code.user_email == user, following = followingList)
 
-    return "YES"
+    return dict(followStatus = followStatus)
 #@action('post/<image_data>/<image_title>',method=["POST", "GET"])
 #@action.uses(db, session, auth)
 @action("post", method="POST")
@@ -120,10 +123,14 @@ def add_friend():
 def post():
     data = request.json.get("data")
     title = request.json.get("title")
+    remixFrom = request.json.get("remix")
+    print("THINGS: ", remixFrom)
+    # assert data is not None
+    # assert title is not None
+    # assert remixFrom is not None
     user = db(db.friend_code.user_email == get_user_email()).select()
     user = user[0].user_name
-    print("YAAA: ",user)
-    db.drawing.insert(title = title, image_data = data, user_name = user)
+    db.drawing.insert(title = title, image_data = data, user_name = user, remixed_from = remixFrom)
     #return dict()
 
 @action('delete_image', method=["POST", "GET"])
@@ -139,6 +146,9 @@ def delete_image():
 def to_profile(username = None):
     assert username is not None
     user = get_user_email()
+    
+    profile_email = db(db.friend_code.user_name == username).select().as_list()[0]["user_email"]
+    print("WAAA:",profile_email)
     data = db(db.drawing.user_name == username).select().as_list()
     data = sorted(data, key=itemgetter('date_added'), reverse = True)
     owner = []
@@ -150,10 +160,14 @@ def to_profile(username = None):
             owner.append(False)
         likes.append(len(d['liked_by']))
     
+    following = db(db.friend_code.user_email == user).select()[0]['following']
+
     return dict(
         data = data,
         owner = owner,
         likes = likes,
+        userEmail = user,
+        userFollowing = following,
         search_bar_url = URL('search_url', signer=url_signer),
         delete_post_url = URL('delete_image', signer=url_signer),
         post_url = URL('post', signer=url_signer),
@@ -161,6 +175,7 @@ def to_profile(username = None):
         main_url = URL('index'),
         add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = username,
+        profile_email = profile_email,
         logged_in = "" if get_user_email() == None else get_user_email(),
     )
 
@@ -198,14 +213,19 @@ def like_post():
     user = get_user_email()
     post = db(db.drawing.id == id).select().as_list()
     temp = post[0]["liked_by"].copy()
+    
+    likeStatus = ""
+
     if user in temp:
         temp.remove(user)
+        likeStatus = "unlike"
     else:
         temp.append(user)
+        likeStatus = "like"
     db.drawing.update_or_insert(db.drawing.id == id , liked_by=temp)
     print(temp)
 
-    return dict(likes = len(temp))
+    return dict(likes = len(temp), likeStatus = likeStatus)
 
 
      
