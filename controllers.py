@@ -82,6 +82,7 @@ def index():
         main_url = URL('index'),
         add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = "",
+        logged_in = "" if get_user_email() == None else get_user_email(),
     )
 
 @action('editor')
@@ -160,6 +161,7 @@ def to_profile(username = None):
         main_url = URL('index'),
         add_friend_url = URL('add_friend', signer=url_signer),
         profile_name = username,
+        logged_in = "" if get_user_email() == None else get_user_email(),
     )
 
 @action('edit_username', method=["GET", "POST"])
