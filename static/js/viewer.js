@@ -76,26 +76,49 @@ const drawFeed = () => {
 
 			if (n >= 8) {
 				n -= 8
-				let [sx, sy, sw, sh] = get(x+3, y, scale)
 				set(x+3, y)
+				let [sx, sy, sw, sh] = get(x+3, y, scale)
+				ctx.fillStyle = "black"
+				ctx.fillRect(sx,sy,sw,sh)
+			} else {
+				let [sx, sy, sw, sh] = get(x+3, y, scale)
+				ctx.fillStyle = "white"
 				ctx.fillRect(sx,sy,sw,sh)
 			}
+
 			if (n >= 4) {
 				n -= 4
-				let [sx, sy, sw, sh] = get(x+2, y, scale)
 				set(x+2, y)
+				let [sx, sy, sw, sh] = get(x+2, y, scale)
+				ctx.fillStyle = "black"
+				ctx.fillRect(sx,sy,sw,sh)
+			} else {
+				let [sx, sy, sw, sh] = get(x+2, y, scale)
+				ctx.fillStyle = "white"
 				ctx.fillRect(sx,sy,sw,sh)
 			}
+
 			if (n >= 2) {
 				n -= 2
-				let [sx, sy, sw, sh] = get(x+1, y, scale)
 				set(x+1, y)
+				let [sx, sy, sw, sh] = get(x+1, y, scale)
+				ctx.fillStyle = "black"
+				ctx.fillRect(sx,sy,sw,sh)
+			} else {
+				let [sx, sy, sw, sh] = get(x+1, y, scale)
+				ctx.fillStyle = "white"
 				ctx.fillRect(sx,sy,sw,sh)
 			}
+
 			if (n >= 1) {
 				n -= 1
-				let [sx, sy, sw, sh] = get(x, y, scale)
 				set(x, y)
+				let [sx, sy, sw, sh] = get(x, y, scale)
+				ctx.fillStyle = "black"
+				ctx.fillRect(sx,sy,sw,sh)
+			} else {
+				let [sx, sy, sw, sh] = get(x, y, scale)
+				ctx.fillStyle = "white"
 				ctx.fillRect(sx,sy,sw,sh)
 			}
 
