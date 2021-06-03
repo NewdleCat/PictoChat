@@ -299,7 +299,7 @@ const toggleEditor = () => {
         document.body.appendChild(fromTemplate("_editorToolMenu"))
 
         remove(document.getElementById("editButton"))
-        remove(document.getElementById("friendInput"))
+        //remove(document.getElementById("friendInput"))
         brush.menuSelect("brush")
 
         calculateCanvasScale()
@@ -316,7 +316,7 @@ const toggleEditor = () => {
         document.getElementById("editorDiv").removeChild(editor.canvas)
 
         document.body.appendChild(fromTemplate("_editButton"))
-        document.body.appendChild(fromTemplate("_friendInput"))
+        //document.body.appendChild(fromTemplate("_friendInput"))
 
 		const addFriendInput = document.getElementById("friendInput")
 		if (addFriendInput) {

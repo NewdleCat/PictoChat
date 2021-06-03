@@ -108,15 +108,15 @@
 </template>
 
 <div class="section">
-	<div id="editorDiv">
-		<canvas id="editorCanvas"></canvas>
+	<div id="centered">
+		<input id="searchBar" type="text" class="input" oninput="getSearchNames()" onfocusin="getSearchNames()" onfocusout="closeSearchNames()" placeholder="Search the Pictoverse">
+		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
+		<div id="profileName" style="font-size: xx-large;"> </div>
+		<div id="drawings"> </div>
 	</div>
 
-	<div id="centered">
-		<input id="searchBar" type="text" class="input" oninput="getSearchNames()" onfocusin="getSearchNames()" onfocusout="closeSearchNames()">
-		<table id="searchBarResults" class="table is-striped is-fullwidth"></table>
-		<div id="profileName" style="text-align: center; font-size: xx-large;"> </div>
-		<div id="drawings"> </div>
+	<div id="editorDiv">
+		<canvas id="editorCanvas"></canvas>
 	</div>
 </div>
 
