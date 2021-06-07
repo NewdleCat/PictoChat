@@ -66,10 +66,6 @@
 	</div>
 </template>
 
-<template id="_dim">
-	<div id="dim"></div>
-</template>
-
 <template id="_feedEntry">
 	<div class="box">
 		<article class="media">
@@ -119,6 +115,12 @@
 	</div>
 
 	<div id="editorDiv">
+		<div class="vue-target">
+			<div id="dim" v-show="showCanvas"></div>
+			<div v-show="showCanvas">
+				some text here
+			</div>
+		</div>
 		<canvas id="editorCanvas"></canvas>
 	</div>
 </div>
