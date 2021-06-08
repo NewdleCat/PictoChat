@@ -47,7 +47,6 @@ const brush = {
     fill() {
         const stack = []
         stack.push([this.x, this.y])
-        console.log(`fill color: ${this.color}`)
 
         while (stack.length > 0) {
             const thing = stack.pop()
@@ -55,7 +54,6 @@ const brush = {
             const y = thing[1]
             const get = editor.getPixel(x, y)
             if (get != -1 && get != this.color) {
-                console.log(`get: ${get}`)
                 editor.setPixel(x, y, this.color)
                 stack.push([x+1, y])
                 stack.push([x-1, y])
