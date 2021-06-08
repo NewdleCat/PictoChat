@@ -42,7 +42,7 @@ def index():
     user = get_user_email()
     temp = db(db.friend_code.user_email == user).select()
     if len(temp) == 0:
-        db.friend_code.insert(uuid=uuid.uuid4(), user_name=user)
+        db.friend_code.insert(uuid=uuid.uuid4(), user_name=user, user_email=user)
 
     data = db(db.drawing.user_email == user).select().as_list()
     following = db(db.friend_code.user_email == user).select()[0]['following']
@@ -130,7 +130,7 @@ def post():
     # assert remixFrom is not None
     user = db(db.friend_code.user_email == get_user_email()).select()
     user = user[0].user_name
-    db.drawing.insert(title = title, image_data = data, user_name = user, remixed_from = remixFrom)
+    db.drawing.insert(title = title, image_data = data, user_name = user, user_email=get_user_email(), remixed_from = remixFrom)
     #return dict()
 
 @action('delete_image', method=["POST", "GET"])

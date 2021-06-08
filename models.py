@@ -24,7 +24,7 @@ db.define_table(
     Field('title', requires=IS_NOT_EMPTY()),
     Field('image_data', requires=IS_NOT_EMPTY()),
     Field('date_added', type="datetime", default=get_time),
-    Field('user_email', default=get_user_email),
+    Field('user_email'),
     Field('user_name'),
     Field('liked_by', type='list:string', default=[]),
     Field('remixed_from', default=""),
@@ -35,7 +35,7 @@ db.define_table(
 	'friend_code',
     Field('user_name', requires=IS_NOT_EMPTY()),
 	Field('uuid', requires=IS_NOT_EMPTY()),
-    Field('user_email', default=get_user_email),
+    Field('user_email'),
     Field('following', type='list:string', default=[]),
 )
 db.friend_code.id.readable = db.friend_code.id.writable = False 
