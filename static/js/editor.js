@@ -175,6 +175,7 @@ const editor = {
         this.remixFrom = ""
         for (let x=0; x<width; x++)
             this.data[x] = []
+        this.createBackup()
     },
 
     setPixel(x, y, value) {
