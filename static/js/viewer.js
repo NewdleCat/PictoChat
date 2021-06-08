@@ -17,10 +17,15 @@ const drawFeed = () => {
 	const profileName = document.getElementById("profileName")
 	if (profile_name != "")
 	{
-		if (userFollowing.includes(profile_email))
-			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Unfollow</a></div>'
-		else
-			profileName.innerHTML = profile_name + "'s profile page" + '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+		profileName.innerHTML = profile_name + "'s profile page"
+		if (profile_email != userEmail) {
+			if (userFollowing.includes(profile_email))
+				profileName.innerHTML += '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Unfollow</a></div>'
+			else
+				profileName.innerHTML += '<div style="text-align: right"><a class="button is-primary" onclick="addFriend()">Follow</a></div>'
+		} else {
+			profileName.innerHTML += '<div style="padding-bottom: 1.5em;"></div>'
+		}
 	}
 
     for (const image of images) {
